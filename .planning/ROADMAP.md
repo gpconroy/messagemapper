@@ -51,10 +51,12 @@ Plans:
   3. User can upload a JSON schema or sample JSON and see its field structure parsed
   4. User sees validation errors when uploading a malformed schema or sample
   5. All parsers produce the same normalized FieldNode structure with id, name, path, type, required flag, and children
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 02-01: TBD during phase planning
+- [ ] 02-01-PLAN.md — FieldNode types, parser registry, normalization utilities, and JSON parsers (TDD)
+- [ ] 02-02-PLAN.md — XML sample parser and XSD schema parser (TDD)
+- [ ] 02-03-PLAN.md — API route for file upload, parser registration, and integration tests
 
 ### Phase 3: Visual Mapping Interface
 **Goal**: Deliver core visual mapping value loop with side-by-side panel interface where users can draw field connections
