@@ -1,4 +1,10 @@
+import dotenv from 'dotenv'
 import { PrismaClient } from '@prisma/client'
+
+// Load environment variables for scripts and non-Next.js contexts
+// Load .env.local first with override, then .env for defaults
+dotenv.config({ path: '.env.local', override: true })
+dotenv.config()
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
