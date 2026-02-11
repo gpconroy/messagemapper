@@ -103,13 +103,50 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (Populated during roadmap creation) | | |
+| PARS-01 | Phase 2: Format Parser Registry | Pending |
+| PARS-02 | Phase 2: Format Parser Registry | Pending |
+| PARS-03 | Phase 2: Format Parser Registry | Pending |
+| PARS-04 | Phase 7: Schema Library Management | Pending |
+| PARS-05 | Phase 7: Schema Library Management | Pending |
+| PARS-06 | Phase 7: Schema Library Management | Pending |
+| PARS-07 | Phase 7: Schema Library Management | Pending |
+| PARS-08 | Phase 2: Format Parser Registry | Pending |
+| MAP-01 | Phase 3: Visual Mapping Interface | Pending |
+| MAP-02 | Phase 3: Visual Mapping Interface | Pending |
+| MAP-03 | Phase 3: Visual Mapping Interface | Pending |
+| MAP-04 | Phase 4: Mapping Operations & UX | Pending |
+| MAP-05 | Phase 4: Mapping Operations & UX | Pending |
+| MAP-06 | Phase 4: Mapping Operations & UX | Pending |
+| MAP-07 | Phase 4: Mapping Operations & UX | Pending |
+| MAP-08 | Phase 4: Mapping Operations & UX | Pending |
+| MAP-09 | Phase 8: Intelligence & Quality | Pending |
+| MAP-10 | Phase 3: Visual Mapping Interface | Pending |
+| MAP-11 | Phase 3: Visual Mapping Interface | Pending |
+| XFRM-01 | Phase 5: Transformation System | Pending |
+| XFRM-02 | Phase 5: Transformation System | Pending |
+| XFRM-03 | Phase 5: Transformation System | Pending |
+| XFRM-04 | Phase 5: Transformation System | Pending |
+| XFRM-05 | Phase 5: Transformation System | Pending |
+| XFRM-06 | Phase 5: Transformation System | Pending |
+| XFRM-07 | Phase 5: Transformation System | Pending |
+| VAL-01 | Phase 6: Validation & Testing | Pending |
+| VAL-02 | Phase 6: Validation & Testing | Pending |
+| PLAT-01 | Phase 9: Platform Features | Pending |
+| PLAT-02 | Phase 9: Platform Features | Pending |
+| PLAT-03 | Phase 9: Platform Features | Pending |
+| PLAT-04 | Phase 9: Platform Features | Pending |
+| PLAT-05 | Phase 9: Platform Features | Pending |
+| PLAT-06 | Phase 9: Platform Features | Pending |
+| PLAT-07 | Phase 9: Platform Features | Pending |
+| PLAT-08 | Phase 9: Platform Features | Pending |
 
 **Coverage:**
 - v1 requirements: 30 total
-- Mapped to phases: 0
-- Unmapped: 30
+- Mapped to phases: 30
+- Unmapped: 0
+
+**Note:** PARS-04 and PARS-05 appear in both Phase 7 (initial capability) and Phase 10 (advanced format parser implementation). Phase 7 covers basic CSV/SQL parsing as part of schema library management, while Phase 10 extends the parser registry with full CSV and SQL DDL format parsers that integrate with all transformation and validation features.
 
 ---
 *Requirements defined: 2026-02-11*
-*Last updated: 2026-02-11 after initial definition*
+*Last updated: 2026-02-11 after roadmap creation*

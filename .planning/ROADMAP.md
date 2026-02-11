@@ -1,0 +1,190 @@
+# Roadmap: MessageMapper
+
+## Overview
+
+MessageMapper evolves from project scaffolding through a pluggable format parsing architecture, visual field mapping interface with transformations, intelligent auto-mapping assistance, multi-tenant platform infrastructure, and advanced format support. Each phase delivers coherent capabilities that build toward the complete visual message mapping platform enabling clients to map fields between any two message formats and save those mappings for reuse.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+Decimal phases appear between their surrounding integers in numeric order.
+
+- [ ] **Phase 1: Foundation & Infrastructure** - Project scaffolding, database schema, multi-tenant architecture with Row-Level Security
+- [ ] **Phase 2: Format Parser Registry** - Pluggable parser architecture with XML and JSON format support
+- [ ] **Phase 3: Visual Mapping Interface** - Side-by-side panel UI with drag-and-drop field connections using React Flow
+- [ ] **Phase 4: Mapping Operations & UX** - Search, filter, expand/collapse, undo/redo, zoom/pan for large schemas
+- [ ] **Phase 5: Transformation System** - Format conversion, concatenation, splitting, constants, conditional logic, lookup tables, custom JavaScript
+- [ ] **Phase 6: Validation & Testing** - Type mismatch detection, required field validation, mapping preview with sample data
+- [ ] **Phase 7: Schema Library Management** - Pre-loaded common schemas and custom schema upload with validation
+- [ ] **Phase 8: Intelligence & Quality** - Auto-mapping suggestions and unmapped field gap analysis
+- [ ] **Phase 9: Platform Features** - Full authentication, role-based access control, workspace management
+- [ ] **Phase 10: Advanced Format Support** - CSV and SQL DDL format parsers extending the registry
+
+## Phase Details
+
+### Phase 1: Foundation & Infrastructure
+**Goal**: Establish project foundation with multi-tenant database architecture and critical architectural decisions that cannot be changed later
+**Depends on**: Nothing (first phase)
+**Requirements**: None (foundational infrastructure)
+**Success Criteria** (what must be TRUE):
+  1. Next.js 14+ application runs locally with TypeScript strict mode enabled
+  2. PostgreSQL database schema exists with multi-tenant Row-Level Security policies active
+  3. Prisma schema generates TypeScript types for all data models
+  4. Application can be deployed to free-tier cloud infrastructure (Neon or Supabase)
+**Plans**: TBD
+
+Plans:
+- [ ] 01-01: TBD during phase planning
+
+### Phase 2: Format Parser Registry
+**Goal**: Create pluggable parser architecture that converts any format into normalized field trees
+**Depends on**: Phase 1
+**Requirements**: PARS-01, PARS-02, PARS-03, PARS-08
+**Success Criteria** (what must be TRUE):
+  1. User can upload an XSD schema file and see its field structure parsed into a navigable tree
+  2. User can upload a sample XML message and have its structure inferred automatically
+  3. User can upload a JSON schema or sample JSON and see its field structure parsed
+  4. User sees validation errors when uploading a malformed schema or sample
+  5. All parsers produce the same normalized FieldNode structure with id, name, path, type, required flag, and children
+**Plans**: TBD
+
+Plans:
+- [ ] 02-01: TBD during phase planning
+
+### Phase 3: Visual Mapping Interface
+**Goal**: Deliver core visual mapping value loop with side-by-side panel interface where users can draw field connections
+**Depends on**: Phase 2
+**Requirements**: MAP-01, MAP-02, MAP-03, MAP-10, MAP-11
+**Success Criteria** (what must be TRUE):
+  1. User sees source fields on the left panel and target fields on the right panel
+  2. User can draw a connector from a source field to a target field to create a 1:1 mapping
+  3. User can expand and collapse nested field structures for XML elements and JSON objects
+  4. User can see mapping status on each field showing mapped, unmapped, or partially mapped state
+  5. User can delete individual mapping connections
+**Plans**: TBD
+
+Plans:
+- [ ] 03-01: TBD during phase planning
+
+### Phase 4: Mapping Operations & UX
+**Goal**: Enable efficient navigation and manipulation of large schemas with hundreds of fields
+**Depends on**: Phase 3
+**Requirements**: MAP-04, MAP-05, MAP-06, MAP-07, MAP-08
+**Success Criteria** (what must be TRUE):
+  1. User can search and filter fields by name in both source and target panels
+  2. User can see which fields are required versus optional with visual indicators
+  3. User can see field data types displayed on each field (string, number, date, boolean)
+  4. User can undo and redo mapping actions
+  5. User can zoom and pan the mapping canvas for large schemas without browser performance degradation
+**Plans**: TBD
+
+Plans:
+- [ ] 04-01: TBD during phase planning
+
+### Phase 5: Transformation System
+**Goal**: Enable field transformations beyond simple 1:1 mapping with format conversion, split/concatenate, conditional logic, and lookup tables
+**Depends on**: Phase 4
+**Requirements**: XFRM-01, XFRM-02, XFRM-03, XFRM-04, XFRM-05, XFRM-06, XFRM-07
+**Success Criteria** (what must be TRUE):
+  1. User can apply format conversion on a mapping for date formats, number formats, and currency codes
+  2. User can concatenate multiple source fields into one target field with configurable separator
+  3. User can split one source field into multiple target fields using delimiter or regex
+  4. User can set a constant value for a target field that is not sourced from input
+  5. User can define conditional mapping rules where if source field equals X, map to Y, otherwise map to Z
+  6. User can create and manage lookup tables for code translation between systems
+  7. User can write custom JavaScript transformation functions for edge cases with sandbox isolation
+**Plans**: TBD
+
+Plans:
+- [ ] 05-01: TBD during phase planning
+
+### Phase 6: Validation & Testing
+**Goal**: Provide validation feedback and testing capabilities so users can verify mapping correctness before production use
+**Depends on**: Phase 5
+**Requirements**: VAL-01, VAL-02
+**Success Criteria** (what must be TRUE):
+  1. User sees validation errors for type mismatches and missing required field mappings
+  2. User can test a mapping with sample data and see the transformed output
+**Plans**: TBD
+
+Plans:
+- [ ] 06-01: TBD during phase planning
+
+### Phase 7: Schema Library Management
+**Goal**: Enable users to quickly start with pre-loaded common schemas and extend with their own custom formats
+**Depends on**: Phase 2
+**Requirements**: PARS-04, PARS-05, PARS-06, PARS-07
+**Success Criteria** (what must be TRUE):
+  1. User can select source and target formats from a pre-loaded library containing ISO20022 types and TransferMate API schemas
+  2. User can upload custom schema or sample files to add to their workspace library
+  3. User can upload a CSV file and have columns extracted as fields
+  4. User can upload a SQL DDL file and have table/column structure extracted as fields
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: TBD during phase planning
+
+### Phase 8: Intelligence & Quality
+**Goal**: Reduce manual mapping work by 50-70% with intelligent auto-suggestions and proactive gap analysis
+**Depends on**: Phase 6
+**Requirements**: MAP-09
+**Success Criteria** (what must be TRUE):
+  1. User sees auto-suggested field matches based on name and type similarity when starting a new mapping
+  2. User can accept or reject auto-mapping suggestions individually or in bulk
+  3. User sees visual indicators highlighting unmapped fields across the entire mapping
+**Plans**: TBD
+
+Plans:
+- [ ] 08-01: TBD during phase planning
+
+### Phase 9: Platform Features
+**Goal**: Enable multi-tenant SaaS operation with authentication, role-based access control, and workspace management
+**Depends on**: Phase 1
+**Requirements**: PLAT-01, PLAT-02, PLAT-03, PLAT-04, PLAT-05, PLAT-06, PLAT-07, PLAT-08
+**Success Criteria** (what must be TRUE):
+  1. User can create an account with email and password
+  2. User can log in and maintain a session across browser refreshes
+  3. User can log out from any page
+  4. Admin can assign roles (admin, editor, viewer) to users in their organization
+  5. Each organization has isolated workspaces that other organizations cannot access
+  6. User can create, rename, and organize mapping configurations within workspaces
+  7. User can save mapping configurations and load them later
+  8. Editor role can create and edit mappings while viewer role has read-only access
+**Plans**: TBD
+
+Plans:
+- [ ] 09-01: TBD during phase planning
+
+### Phase 10: Advanced Format Support
+**Goal**: Extend format parser registry to support CSV and SQL DDL formats for broader system interoperability
+**Depends on**: Phase 7
+**Requirements**: PARS-04, PARS-05
+**Success Criteria** (what must be TRUE):
+  1. User can upload a CSV file and see columns parsed as fields in the normalized field tree structure
+  2. User can upload a SQL DDL file and see table and column structure extracted as fields
+  3. CSV and SQL formats work with all existing mapping, transformation, and validation features without modification
+**Plans**: TBD
+
+Plans:
+- [ ] 10-01: TBD during phase planning
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Foundation & Infrastructure | 0/TBD | Not started | - |
+| 2. Format Parser Registry | 0/TBD | Not started | - |
+| 3. Visual Mapping Interface | 0/TBD | Not started | - |
+| 4. Mapping Operations & UX | 0/TBD | Not started | - |
+| 5. Transformation System | 0/TBD | Not started | - |
+| 6. Validation & Testing | 0/TBD | Not started | - |
+| 7. Schema Library Management | 0/TBD | Not started | - |
+| 8. Intelligence & Quality | 0/TBD | Not started | - |
+| 9. Platform Features | 0/TBD | Not started | - |
+| 10. Advanced Format Support | 0/TBD | Not started | - |
