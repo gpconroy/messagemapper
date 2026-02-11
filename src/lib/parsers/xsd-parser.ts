@@ -47,8 +47,9 @@ export class XsdParser implements BaseParser {
       }
 
       // Check if root element is 'schema' (namespace prefix already removed)
-      const rootName = rootKeys[0]
-      if (rootName !== 'schema') {
+      // Filter out ?xml declaration which fast-xml-parser includes
+      const actualRootKeys = rootKeys.filter(key => !key.startsWith('?'))
+      if (actualRootKeys.length === 0 || actualRootKeys[0] !== 'schema') {
         return {
           valid: false,
           errors: ['Not a valid XSD schema'],

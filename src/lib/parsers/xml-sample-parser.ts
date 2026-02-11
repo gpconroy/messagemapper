@@ -96,8 +96,8 @@ export class XmlSampleParser implements BaseParser {
     const maxDepth = options?.maxDepth ?? 50
     const parsed = this.xmlParser.parse(content)
 
-    // Get root element
-    const rootKeys = Object.keys(parsed)
+    // Get root element (filter out ?xml declaration)
+    const rootKeys = Object.keys(parsed).filter(key => !key.startsWith('?'))
     if (rootKeys.length === 0) {
       return []
     }
