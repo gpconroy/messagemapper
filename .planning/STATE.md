@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 3 of 10 (Visual Mapping Interface)
-Plan: 1 of 3 in current phase (03-01 complete, 03-02 and 03-03 pending)
+Plan: 2 of 3 in current phase (03-01 and 03-02 complete, 03-03 pending)
 Status: In Progress
-Last activity: 2026-02-11 — Completed plan 03-01 (React Flow mapper foundation)
+Last activity: 2026-02-11 — Completed plan 03-02 (Field tree visualization)
 
-Progress: [████▌░░░░░] 50%
+Progress: [█████░░░░░] 53%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: ~673s (11.2 minutes)
-- Total execution time: ~1.9 hours
+- Total plans completed: 8
+- Average duration: ~584s (9.7 minutes)
+- Total execution time: ~2.0 hours
 
 **By Phase:**
 
@@ -29,7 +29,7 @@ Progress: [████▌░░░░░] 50%
 |-------|-------|--------|
 | 01 | 3/3 | ✅ Complete |
 | 02 | 3/3 | ✅ Complete |
-| 03 | 1/3 | 🔄 In Progress |
+| 03 | 2/3 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
@@ -41,6 +41,7 @@ Progress: [████▌░░░░░] 50%
 | 02-02 | 1217s | 2 | 5 |
 | 02-03 | 622s | 2 | 5 |
 | 03-01 | 1399s | 2 | 7 |
+| 03-02 | 252s | 2 | 4 |
 
 ## Accumulated Context
 
@@ -74,6 +75,10 @@ Recent decisions affecting current work:
 - Plan 03-01: MappingNodeData extends Record<string, unknown> for React Flow type compatibility
 - Plan 03-01: Fixed-position nodes (draggable: false) to keep source/target panels in place
 - Plan 03-01: ReactFlowProvider wraps entire mapper page for hook context availability
+- Plan 03-02: Expansion state stored separately from React Flow node data to prevent collapse during re-renders
+- Plan 03-02: FieldTreeItem isExpanded prop is a function, not boolean, for correct recursive child expansion
+- Plan 03-02: Handles shown on leaf fields and collapsed parents, hidden on expanded parents
+- Plan 03-02: nodeTypes defined at module level to prevent React Flow warning about changing types
 
 ### Pending Todos
 
@@ -93,6 +98,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-11
-Stopped at: Completed 03-01-PLAN.md (React Flow mapper foundation)
+Stopped at: Completed 03-02-PLAN.md (Field tree visualization)
 Resume file: None
-Next: Plan 03-02 (Field tree visualization with expand/collapse)
+Next: Plan 03-03 (Interactive field mapping with connections)
