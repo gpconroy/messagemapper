@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** Clients can visually map fields between any two message formats and save those mappings for reuse — making system integration visible, configurable, and repeatable.
-**Current focus:** Phase 2: Format Parser Registry
+**Current focus:** Phase 3: Visual Mapping Interface
 
 ## Current Position
 
-Phase: 2 of 10 (Format Parser Registry)
-Plan: 3 of 3 in current phase (02-01, 02-02, 02-03 complete)
-Status: Complete
-Last activity: 2026-02-11 — Completed plan 02-03 (Parser registry integration and API)
+Phase: 3 of 10 (Visual Mapping Interface)
+Plan: 1 of 3 in current phase (03-01 complete, 03-02 and 03-03 pending)
+Status: In Progress
+Last activity: 2026-02-11 — Completed plan 03-01 (React Flow mapper foundation)
 
-Progress: [████░░░░░░] 46%
+Progress: [████▌░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: ~576s (9.6 minutes)
-- Total execution time: ~1.6 hours
+- Total plans completed: 7
+- Average duration: ~673s (11.2 minutes)
+- Total execution time: ~1.9 hours
 
 **By Phase:**
 
@@ -29,6 +29,7 @@ Progress: [████░░░░░░] 46%
 |-------|-------|--------|
 | 01 | 3/3 | ✅ Complete |
 | 02 | 3/3 | ✅ Complete |
+| 03 | 1/3 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
@@ -39,6 +40,7 @@ Progress: [████░░░░░░] 46%
 | 02-01 | 469s | 2 | 9 |
 | 02-02 | 1217s | 2 | 5 |
 | 02-03 | 622s | 2 | 5 |
+| 03-01 | 1399s | 2 | 7 |
 
 ## Accumulated Context
 
@@ -68,6 +70,10 @@ Recent decisions affecting current work:
 - Plan 02-03: Parser barrel export registers all 4 parsers at module initialization
 - Plan 02-03: API route accepts format override via form field for explicit format specification
 - Plan 02-03: 5MB file size limit prevents server resource exhaustion
+- Plan 03-01: React Flow named export instead of default export to avoid TypeScript JSX errors
+- Plan 03-01: MappingNodeData extends Record<string, unknown> for React Flow type compatibility
+- Plan 03-01: Fixed-position nodes (draggable: false) to keep source/target panels in place
+- Plan 03-01: ReactFlowProvider wraps entire mapper page for hook context availability
 
 ### Pending Todos
 
@@ -87,6 +93,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-11
-Stopped at: Completed 02-03-PLAN.md (Parser registry integration and API)
+Stopped at: Completed 03-01-PLAN.md (React Flow mapper foundation)
 Resume file: None
-Next: Phase 3 planning (Schema upload UI with drag-and-drop)
+Next: Plan 03-02 (Field tree visualization with expand/collapse)
