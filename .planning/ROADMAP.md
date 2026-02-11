@@ -12,8 +12,8 @@ MessageMapper evolves from project scaffolding through a pluggable format parsin
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Infrastructure** - Project scaffolding, database schema, multi-tenant architecture with Row-Level Security
-- [ ] **Phase 2: Format Parser Registry** - Pluggable parser architecture with XML and JSON format support
+- [x] **Phase 1: Foundation & Infrastructure** - Project scaffolding, database schema, multi-tenant architecture with Row-Level Security
+- [x] **Phase 2: Format Parser Registry** - Pluggable parser architecture with XML and JSON format support
 - [ ] **Phase 3: Visual Mapping Interface** - Side-by-side panel UI with drag-and-drop field connections using React Flow
 - [ ] **Phase 4: Mapping Operations & UX** - Search, filter, expand/collapse, undo/redo, zoom/pan for large schemas
 - [ ] **Phase 5: Transformation System** - Format conversion, concatenation, splitting, constants, conditional logic, lookup tables, custom JavaScript
@@ -37,9 +37,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Scaffold Next.js project with TypeScript strict mode, App Router, and environment configuration
-- [ ] 01-02-PLAN.md — Define multi-tenant Prisma schema and create RLS-aware client infrastructure
-- [ ] 01-03-PLAN.md — Apply SQL RLS policies, verify tenant isolation, and configure Neon + Vercel deployment
+- [x] 01-01-PLAN.md — Scaffold Next.js project with TypeScript strict mode, App Router, and environment configuration
+- [x] 01-02-PLAN.md — Define multi-tenant Prisma schema and create RLS-aware client infrastructure
+- [x] 01-03-PLAN.md — Apply SQL RLS policies, verify tenant isolation, and configure Neon + Vercel deployment
 
 ### Phase 2: Format Parser Registry
 **Goal**: Create pluggable parser architecture that converts any format into normalized field trees
@@ -54,9 +54,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — FieldNode types, parser registry, normalization utilities, and JSON parsers (TDD)
-- [ ] 02-02-PLAN.md — XML sample parser and XSD schema parser (TDD)
-- [ ] 02-03-PLAN.md — API route for file upload, parser registration, and integration tests
+- [x] 02-01-PLAN.md — FieldNode types, parser registry, normalization utilities, and JSON parsers (TDD)
+- [x] 02-02-PLAN.md — XML sample parser and XSD schema parser (TDD)
+- [x] 02-03-PLAN.md — API route for file upload, parser registration, and integration tests
 
 ### Phase 3: Visual Mapping Interface
 **Goal**: Deliver core visual mapping value loop with side-by-side panel interface where users can draw field connections
@@ -182,8 +182,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Infrastructure | 0/3 | Not started | - |
-| 2. Format Parser Registry | 0/TBD | Not started | - |
+| 1. Foundation & Infrastructure | 3/3 | ✓ Complete | 2026-02-11 |
+| 2. Format Parser Registry | 3/3 | ✓ Complete | 2026-02-11 |
 | 3. Visual Mapping Interface | 0/TBD | Not started | - |
 | 4. Mapping Operations & UX | 0/TBD | Not started | - |
 | 5. Transformation System | 0/TBD | Not started | - |
