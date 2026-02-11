@@ -1,9 +1,11 @@
 'use client'
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { Handle, Position } from '@xyflow/react'
 import { FieldNode } from '@/types/parser-types'
 import { MappingSide, FieldMappingStatus } from '@/types/mapping-types'
+import { MappingStatusContext } from './MappingCanvas'
+import { getMappingStatus } from '../hooks/useMappingState'
 
 interface FieldTreeItemProps {
   field: FieldNode
@@ -26,6 +28,28 @@ function FieldTreeItemComponent({
   const expanded = isExpanded(field.path)
   const showHandle = !hasChildren || !expanded
 
+  // Get mapped paths from context to compute status for children
+  const { mappedSourcePaths, mappedTargetPaths } = useContext(MappingStatusContext)
+  const mappedPaths = side === 'source' ? mappedSourcePaths : mappedTargetPaths
+
+  // Status indicator colors
+  const statusIndicator =
+    mappingStatus === 'mapped'
+      ? 'bg-green-500'
+      : mappingStatus === 'partial'
+      ? 'bg-amber-400'
+      : 'bg-gray-300'
+
+  // Handle colors based on mapping status
+  const handleColor =
+    mappingStatus === 'mapped'
+      ? side === 'source'
+        ? 'bg-green-500 border-green-600'
+        : 'bg-green-500 border-green-600'
+      : side === 'source'
+      ? 'bg-blue-500 border-blue-600'
+      : 'bg-green-500 border-green-600'
+
   return (
     <div>
       {/* Field row */}
@@ -33,6 +57,18 @@ function FieldTreeItemComponent({
         className="relative flex items-center border-b border-gray-100 hover:bg-blue-50 py-1.5 px-2 group"
         style={{ paddingLeft: depth * 16 + 8 }}
       >
+        {/* Mapping status indicator dot */}
+        <div
+          className={`w-2 h-2 rounded-full mr-2 flex-shrink-0 ${statusIndicator}`}
+          title={
+            mappingStatus === 'mapped'
+              ? 'Fully mapped'
+              : mappingStatus === 'partial'
+              ? 'Partially mapped'
+              : 'Unmapped'
+          }
+        />
+
         {/* Expand/collapse chevron */}
         {hasChildren && (
           <button
@@ -68,9 +104,13 @@ function FieldTreeItemComponent({
             id={field.path}
             className={`!w-3 !h-3 !border-2 ${
               side === 'source'
-                ? '!right-0 !bg-blue-500 !border-blue-600'
-                : '!left-0 !bg-green-500 !border-green-600'
+                ? `!right-0 !${handleColor}`
+                : `!left-0 !${handleColor}`
             }`}
+            style={{
+              background: mappingStatus === 'mapped' ? '#22c55e' : side === 'source' ? '#2563eb' : '#22c55e',
+              borderColor: mappingStatus === 'mapped' ? '#16a34a' : side === 'source' ? '#1e40af' : '#16a34a',
+            }}
           />
         )}
       </div>
@@ -86,7 +126,7 @@ function FieldTreeItemComponent({
               side={side}
               isExpanded={isExpanded}
               onToggle={onToggle}
-              mappingStatus={mappingStatus}
+              mappingStatus={getMappingStatus(child, mappedPaths)}
             />
           ))}
         </div>

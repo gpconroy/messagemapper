@@ -1,10 +1,12 @@
 'use client'
 
-import React from 'react'
+import React, { useContext } from 'react'
 import type { Node } from '@xyflow/react'
 import { MappingNodeData } from '@/types/mapping-types'
 import { FieldTreeItem } from './FieldTreeItem'
 import { useFieldTree } from '../hooks/useFieldTree'
+import { MappingStatusContext } from './MappingCanvas'
+import { getMappingStatus } from '../hooks/useMappingState'
 
 interface FieldTreeNodeProps {
   id: string
@@ -13,6 +15,10 @@ interface FieldTreeNodeProps {
 
 function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
   const { isExpanded, toggleExpand, expandAll, collapseAll } = useFieldTree(id)
+  const { mappedSourcePaths, mappedTargetPaths } = useContext(MappingStatusContext)
+
+  // Get the appropriate mapped paths set for this side
+  const mappedPaths = data.side === 'source' ? mappedSourcePaths : mappedTargetPaths
 
   const handleExpandAll = () => {
     expandAll(data.fields)
@@ -74,6 +80,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
                 side={data.side}
                 isExpanded={isExpanded}
                 onToggle={toggleExpand}
+                mappingStatus={getMappingStatus(field, mappedPaths)}
               />
             ))}
           </div>
