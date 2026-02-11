@@ -68,10 +68,12 @@ Plans:
   3. User can expand and collapse nested field structures for XML elements and JSON objects
   4. User can see mapping status on each field showing mapped, unmapped, or partially mapped state
   5. User can delete individual mapping connections
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 03-01: TBD during phase planning
+- [ ] 03-01-PLAN.md — Install React Flow, create mapper page with file upload and schema display
+- [ ] 03-02-PLAN.md — Custom field tree nodes with expand/collapse and per-field connection handles
+- [ ] 03-03-PLAN.md — Connection drawing, validation, deletion, and mapping status indicators
 
 ### Phase 4: Mapping Operations & UX
 **Goal**: Enable efficient navigation and manipulation of large schemas with hundreds of fields
@@ -184,7 +186,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 |-------|----------------|--------|-----------|
 | 1. Foundation & Infrastructure | 3/3 | ✓ Complete | 2026-02-11 |
 | 2. Format Parser Registry | 3/3 | ✓ Complete | 2026-02-11 |
-| 3. Visual Mapping Interface | 0/TBD | Not started | - |
+| 3. Visual Mapping Interface | 0/3 | In Progress | - |
 | 4. Mapping Operations & UX | 0/TBD | Not started | - |
 | 5. Transformation System | 0/TBD | Not started | - |
 | 6. Validation & Testing | 0/TBD | Not started | - |
