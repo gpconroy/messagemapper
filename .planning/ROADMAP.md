@@ -34,10 +34,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. PostgreSQL database schema exists with multi-tenant Row-Level Security policies active
   3. Prisma schema generates TypeScript types for all data models
   4. Application can be deployed to free-tier cloud infrastructure (Neon or Supabase)
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: TBD during phase planning
+- [ ] 01-01-PLAN.md — Scaffold Next.js project with TypeScript strict mode, App Router, and environment configuration
+- [ ] 01-02-PLAN.md — Define multi-tenant Prisma schema and create RLS-aware client infrastructure
+- [ ] 01-03-PLAN.md — Apply SQL RLS policies, verify tenant isolation, and configure Neon + Vercel deployment
 
 ### Phase 2: Format Parser Registry
 **Goal**: Create pluggable parser architecture that converts any format into normalized field trees
@@ -174,11 +176,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Infrastructure | 0/TBD | Not started | - |
+| 1. Foundation & Infrastructure | 0/3 | Not started | - |
 | 2. Format Parser Registry | 0/TBD | Not started | - |
 | 3. Visual Mapping Interface | 0/TBD | Not started | - |
 | 4. Mapping Operations & UX | 0/TBD | Not started | - |
