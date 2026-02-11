@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   useNodesState,
   useEdgesState,
@@ -13,7 +13,43 @@ import {
   type OnEdgesChange,
 } from '@xyflow/react'
 import { FieldNode } from '@/types/parser-types'
-import { MappingNodeData } from '@/types/mapping-types'
+import { MappingNodeData, MappingEdgeData, FieldMappingStatus, MappingSide } from '@/types/mapping-types'
+import { createMappingEdgeId } from '../lib/validation'
+
+/**
+ * Recursively collects all leaf field paths from a field tree
+ */
+function getLeafPaths(field: FieldNode): string[] {
+  if (field.children.length === 0) {
+    return [field.path]
+  }
+  return field.children.flatMap(getLeafPaths)
+}
+
+/**
+ * Computes the mapping status for a field based on its descendants
+ */
+export function getMappingStatus(
+  field: FieldNode,
+  mappedPaths: Set<string>
+): FieldMappingStatus {
+  const leafPaths = getLeafPaths(field)
+
+  if (leafPaths.length === 0) {
+    // No leaves (shouldn't happen, but safety check)
+    return 'unmapped'
+  }
+
+  const mappedCount = leafPaths.filter((path) => mappedPaths.has(path)).length
+
+  if (mappedCount === 0) {
+    return 'unmapped'
+  } else if (mappedCount === leafPaths.length) {
+    return 'mapped'
+  } else {
+    return 'partial'
+  }
+}
 
 export function useMappingState() {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<MappingNodeData>>([] as Node<MappingNodeData>[])
@@ -71,9 +107,47 @@ export function useMappingState() {
     [setNodes]
   )
 
+  // Derive mapped paths from edges
+  const mappedSourcePaths = useMemo(() => {
+    const paths = new Set<string>()
+    edges.forEach((edge) => {
+      if (edge.sourceHandle) {
+        paths.add(edge.sourceHandle)
+      }
+    })
+    return paths
+  }, [edges])
+
+  const mappedTargetPaths = useMemo(() => {
+    const paths = new Set<string>()
+    edges.forEach((edge) => {
+      if (edge.targetHandle) {
+        paths.add(edge.targetHandle)
+      }
+    })
+    return paths
+  }, [edges])
+
   const onConnect: OnConnect = useCallback(
     (connection) => {
-      setEdges((eds) => addEdge(connection, eds))
+      if (!connection.sourceHandle || !connection.targetHandle) return
+
+      const newEdge: Edge<MappingEdgeData> = {
+        id: createMappingEdgeId(connection.sourceHandle, connection.targetHandle),
+        source: connection.source!,
+        target: connection.target!,
+        sourceHandle: connection.sourceHandle,
+        targetHandle: connection.targetHandle,
+        type: 'smoothstep',
+        animated: true,
+        style: { stroke: '#2563eb', strokeWidth: 2 },
+        data: {
+          sourceFieldPath: connection.sourceHandle,
+          targetFieldPath: connection.targetHandle,
+        },
+      }
+
+      setEdges((eds) => [...eds, newEdge])
     },
     [setEdges]
   )
@@ -94,5 +168,7 @@ export function useMappingState() {
     setTargetSchema,
     onConnect,
     onEdgesDelete,
+    mappedSourcePaths,
+    mappedTargetPaths,
   }
 }

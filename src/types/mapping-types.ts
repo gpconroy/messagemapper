@@ -12,7 +12,7 @@ export interface MappingNodeData extends Record<string, unknown> {
 }
 
 /** Metadata stored on edges connecting two fields */
-export interface MappingEdgeData {
+export interface MappingEdgeData extends Record<string, unknown> {
   sourceFieldPath: string
   targetFieldPath: string
 }
