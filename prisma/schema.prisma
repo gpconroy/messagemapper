@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users          User[]
+  workspaces     Workspace[]
+  formatSchemas  FormatSchema[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("editor")  // admin, editor, viewer
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mappingConfigs MappingConfig[] @relation("CreatedBy")
+
+  @@index([tenantId])
+  @@index([email])
+  @@map("users")
+}
+
+model Workspace {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  mappingConfigs MappingConfig[]
+
+  @@index([tenantId])
+  @@map("workspaces")
+}
+
+model FormatSchema {
+  id          String   @id @default(uuid())
+  name        String
+  formatType  String   // xsd, json, csv, sql, custom
+  version     String?
+  schemaData  Json     // Parsed schema tree structure
+  isLibrary   Boolean  @default(false)  // Pre-loaded vs custom
+  tenantId    String?  // Null for library schemas (shared across tenants)
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sourceMappings MappingConfig[] @relation("SourceSchema")
+  targetMappings MappingConfig[] @relation("TargetSchema")
+
+  @@index([tenantId])
+  @@index([formatType])
+  @@map("format_schemas")
+}
+
+model MappingConfig {
+  id             String   @id @default(uuid())
+  name           String
+  description    String?
+  mappingData    Json     // The actual field-to-field mapping definitions
+  status         String   @default("draft")  // draft, active, archived
+  workspaceId    String
+  workspace      Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  sourceSchemaId String
+  sourceSchema   FormatSchema @relation("SourceSchema", fields: [sourceSchemaId], references: [id])
+  targetSchemaId String
+  targetSchema   FormatSchema @relation("TargetSchema", fields: [targetSchemaId], references: [id])
+  createdById    String
+  createdBy      User         @relation("CreatedBy", fields: [createdById], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([workspaceId])
+  @@index([sourceSchemaId])
+  @@index([targetSchemaId])
+  @@index([createdById])
+  @@map("mapping_configs")
+}
