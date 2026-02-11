@@ -19,7 +19,7 @@ export function normalizeType(rawType: string | string[] | undefined): FieldType
 
   const type = rawType.toLowerCase()
 
-  // JSON Schema types
+  // JSON Schema types and inferred types from samples
   if (type === 'string') return 'string'
   if (type === 'number') return 'number'
   if (type === 'integer') return 'integer'
@@ -27,6 +27,8 @@ export function normalizeType(rawType: string | string[] | undefined): FieldType
   if (type === 'object') return 'object'
   if (type === 'array') return 'array'
   if (type === 'null') return 'null'
+  if (type === 'date') return 'date' // Inferred date type from samples
+  if (type === 'any') return 'any' // Explicit any type
 
   // XSD types
   if (type === 'xs:string' || type.endsWith(':string')) return 'string'
