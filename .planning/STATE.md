@@ -5,29 +5,30 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** Clients can visually map fields between any two message formats and save those mappings for reuse — making system integration visible, configurable, and repeatable.
-**Current focus:** Phase 1: Foundation & Infrastructure
+**Current focus:** Phase 2: Format Parser Registry
 
 ## Current Position
 
-Phase: 1 of 10 (Foundation & Infrastructure) — ✅ COMPLETE
-Plan: 3 of 3 in current phase (all complete)
-Status: Phase complete, ready for Phase 02
-Last activity: 2026-02-11 — Completed plan 01-03 (RLS policies & database deployment)
+Phase: 2 of 10 (Format Parser Registry)
+Plan: 1 of 3 in current phase (02-01 complete)
+Status: In progress
+Last activity: 2026-02-11 — Completed plan 02-01 (Parser types, registry, JSON parsers)
 
-Progress: [███░░░░░░░] 30%
+Progress: [███░░░░░░░] 31%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: manual execution (01-03 completed directly by orchestrator)
-- Total execution time: ~0.5 hours
+- Total plans completed: 4
+- Average duration: ~329s (5.5 minutes)
+- Total execution time: ~0.8 hours
 
 **By Phase:**
 
 | Phase | Plans | Status |
 |-------|-------|--------|
 | 01 | 3/3 | ✅ Complete |
+| 02 | 1/3 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
@@ -35,6 +36,7 @@ Progress: [███░░░░░░░] 30%
 | 01-01 | 77s | 2 | 9 |
 | 01-02 | 876s | 2 | 5 |
 | 01-03 | manual | 2 | 4 |
+| 02-01 | 469s | 2 | 9 |
 
 ## Accumulated Context
 
@@ -57,6 +59,7 @@ Recent decisions affecting current work:
 - Plan 01-03: Created app_user role without BYPASSRLS (neondb_owner bypasses all RLS policies)
 - Plan 01-03: Changed tenantClient API to tenantQuery with interactive transactions for guaranteed same-connection execution
 - Plan 01-03: Library schemas with tenantId=NULL accessible to all tenants for shared ISO20022/industry formats
+- [Phase 02-01]: Custom $ref resolver instead of ESM-only @apidevtools/json-schema-ref-parser for Jest compatibility
 
 ### Pending Todos
 
@@ -76,6 +79,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-11
-Stopped at: Completed Phase 01 (all 3 plans), RLS verified working, app_user role created
+Stopped at: Completed 02-01-PLAN.md (Parser types, registry, JSON parsers with TDD)
 Resume file: None
-Next: Phase 02 (Format Parser Registry) — Schema upload & validation system
+Next: Plan 02-02 (XML parsers: XMLSampleParser and XSDParser)
