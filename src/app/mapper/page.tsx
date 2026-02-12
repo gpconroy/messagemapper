@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ReactFlowProvider } from '@xyflow/react'
 import { SchemaUploadPanel } from './components/SchemaUploadPanel'
 import { MappingCanvas } from './components/MappingCanvas'
+import { MappingToolbar } from './components/MappingToolbar'
 import { useMappingState } from './hooks/useMappingState'
 
 function MapperContent() {
@@ -44,6 +45,9 @@ function MapperContent() {
           <SchemaUploadPanel side="target" onSchemaLoaded={setTargetSchema} />
         </div>
       </div>
+
+      {/* Mapping Toolbar */}
+      <MappingToolbar />
 
       {/* Mapping Canvas */}
       <div className="flex-1 bg-gray-100">

@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** Clients can visually map fields between any two message formats and save those mappings for reuse — making system integration visible, configurable, and repeatable.
-**Current focus:** Phase 3: Visual Mapping Interface
+**Current focus:** Phase 4: Mapping Operations UX
 
 ## Current Position
 
-Phase: 3 of 10 (Visual Mapping Interface)
-Plan: 3 of 4 in current phase (03-01, 03-02, and 03-04 complete, 03-03 pending)
+Phase: 4 of 10 (Mapping Operations UX)
+Plan: 1 of 3 in current phase (04-01 complete)
 Status: In Progress
-Last activity: 2026-02-12 - Completed quick task 1: make the MessageMapper green on the top of the web application
+Last activity: 2026-02-12 — Completed plan 04-01 (Search/filter and enhanced visual indicators)
 
-Progress: [█████░░░░░] 56%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: ~503s (8.4 minutes)
-- Total execution time: ~2.1 hours
+- Total plans completed: 10
+- Average duration: ~453s (7.5 minutes)
+- Total execution time: ~2.2 hours
 
 **By Phase:**
 
@@ -30,6 +30,7 @@ Progress: [█████░░░░░] 56%
 | 01 | 3/3 | ✅ Complete |
 | 02 | 3/3 | ✅ Complete |
 | 03 | 3/4 | 🔄 In Progress |
+| 04 | 1/3 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
@@ -43,6 +44,7 @@ Progress: [█████░░░░░] 56%
 | 03-01 | 1399s | 2 | 7 |
 | 03-02 | 252s | 2 | 4 |
 | 03-04 | 180s | 1 | 2 |
+| 04-01 | 261s | 2 | 4 |
 
 ## Accumulated Context
 
@@ -82,6 +84,11 @@ Recent decisions affecting current work:
 - Plan 03-02: nodeTypes defined at module level to prevent React Flow warning about changing types
 - [Phase 03-04]: Lifted useMappingState() to MapperContent parent component to eliminate duplicate state instances
 - [Phase 03-04]: MappingCanvas receives all state via props instead of calling hooks directly
+- Plan 04-01: Search filtering uses recursive algorithm - parent matches show all children, child matches show parent chain
+- Plan 04-01: 300ms debounce delay prevents excessive re-filtering during typing
+- Plan 04-01: Auto-expand matching paths when search is active for immediate visibility
+- Plan 04-01: Type color map provides distinct colors per type (8 types with unique colors)
+- Plan 04-01: Required fields use red left border plus asterisk for dual visual reinforcement
 
 ### Pending Todos
 
@@ -107,6 +114,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 03-04-PLAN.md (State isolation bug fix)
+Stopped at: Completed 04-01-PLAN.md (Search/filter and enhanced visual indicators)
 Resume file: None
-Next: Plan 03-03 (Interactive field mapping with connections)
+Next: Plan 04-02
