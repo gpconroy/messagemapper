@@ -1,10 +1,8 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useEffect } from 'react'
 import {
   useNodesState,
-  useEdgesState,
-  addEdge,
   type Node,
   type Edge,
   type OnConnect,
@@ -13,8 +11,8 @@ import {
   type OnEdgesChange,
 } from '@xyflow/react'
 import { FieldNode } from '@/types/parser-types'
-import { MappingNodeData, MappingEdgeData, FieldMappingStatus, MappingSide } from '@/types/mapping-types'
-import { createMappingEdgeId } from '../lib/validation'
+import { MappingNodeData, MappingEdgeData, FieldMappingStatus } from '@/types/mapping-types'
+import { useMappingStore } from '../store/useMappingStore'
 
 /**
  * Recursively collects all leaf field paths from a field tree
@@ -52,120 +50,107 @@ export function getMappingStatus(
 }
 
 export function useMappingState() {
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node<MappingNodeData>>([] as Node<MappingNodeData>[])
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([] as Edge[])
+  const store = useMappingStore()
+  const { sourceSchema, targetSchema, connections } = store
 
-  const setSourceSchema = useCallback(
-    (fields: FieldNode[], label: string) => {
-      const newNode: Node<MappingNodeData> = {
+  // Build nodes from schemas
+  const schemaNodes = useMemo(() => {
+    const result: Node<MappingNodeData>[] = []
+    if (sourceSchema) {
+      result.push({
         id: 'source-node',
         type: 'fieldTree',
         position: { x: 0, y: 0 },
         data: {
           side: 'source',
-          label,
-          fields,
+          label: sourceSchema.label,
+          fields: sourceSchema.fields,
           expanded: {},
         },
         draggable: false,
-      }
-
-      setNodes((nds) => {
-        const existing = nds.find((n) => n.id === 'source-node')
-        if (existing) {
-          return nds.map((n) => (n.id === 'source-node' ? newNode : n))
-        }
-        return [...nds, newNode]
       })
-    },
-    [setNodes]
-  )
-
-  const setTargetSchema = useCallback(
-    (fields: FieldNode[], label: string) => {
-      const newNode: Node<MappingNodeData> = {
+    }
+    if (targetSchema) {
+      result.push({
         id: 'target-node',
         type: 'fieldTree',
         position: { x: 600, y: 0 },
         data: {
           side: 'target',
-          label,
-          fields,
+          label: targetSchema.label,
+          fields: targetSchema.fields,
           expanded: {},
         },
         draggable: false,
-      }
-
-      setNodes((nds) => {
-        const existing = nds.find((n) => n.id === 'target-node')
-        if (existing) {
-          return nds.map((n) => (n.id === 'target-node' ? newNode : n))
-        }
-        return [...nds, newNode]
       })
-    },
-    [setNodes]
-  )
+    }
+    return result
+  }, [sourceSchema, targetSchema])
 
-  // Derive mapped paths from edges
-  const mappedSourcePaths = useMemo(() => {
-    const paths = new Set<string>()
-    edges.forEach((edge) => {
-      if (edge.sourceHandle) {
-        paths.add(edge.sourceHandle)
-      }
-    })
-    return paths
-  }, [edges])
+  // Use React Flow's nodes state for UI-level changes (position, selection)
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node<MappingNodeData>>(schemaNodes)
 
-  const mappedTargetPaths = useMemo(() => {
-    const paths = new Set<string>()
-    edges.forEach((edge) => {
-      if (edge.targetHandle) {
-        paths.add(edge.targetHandle)
-      }
-    })
-    return paths
-  }, [edges])
+  // Sync schema changes to React Flow nodes
+  useEffect(() => {
+    setNodes(schemaNodes)
+  }, [schemaNodes, setNodes])
 
-  const onConnect: OnConnect = useCallback(
-    (connection) => {
-      if (!connection.sourceHandle || !connection.targetHandle) return
-
-      const newEdge: Edge<MappingEdgeData> = {
-        id: createMappingEdgeId(connection.sourceHandle, connection.targetHandle),
-        source: connection.source!,
-        target: connection.target!,
-        sourceHandle: connection.sourceHandle,
-        targetHandle: connection.targetHandle,
+  // Build edges from connections
+  const edges: Edge[] = useMemo(
+    () =>
+      connections.map((conn) => ({
+        id: conn.id,
+        source: 'source-node',
+        target: 'target-node',
+        sourceHandle: conn.sourceFieldPath,
+        targetHandle: conn.targetFieldPath,
         type: 'smoothstep',
         animated: true,
         style: { stroke: '#2563eb', strokeWidth: 2 },
         data: {
-          sourceFieldPath: connection.sourceHandle,
-          targetFieldPath: connection.targetHandle,
+          sourceFieldPath: conn.sourceFieldPath,
+          targetFieldPath: conn.targetFieldPath,
         },
-      }
+      })),
+    [connections]
+  )
 
-      setEdges((eds) => [...eds, newEdge])
+  // Derive mapped paths from connections
+  const mappedSourcePaths = useMemo(
+    () => new Set(connections.map((c) => c.sourceFieldPath)),
+    [connections]
+  )
+  const mappedTargetPaths = useMemo(
+    () => new Set(connections.map((c) => c.targetFieldPath)),
+    [connections]
+  )
+
+  const onConnect: OnConnect = useCallback(
+    (connection) => {
+      if (!connection.sourceHandle || !connection.targetHandle) return
+      store.addConnection(connection.sourceHandle, connection.targetHandle)
     },
-    [setEdges]
+    [store]
   )
 
   const onEdgesDelete: OnEdgesDelete = useCallback(
     (edgesToDelete) => {
-      setEdges((eds) => eds.filter((e) => !edgesToDelete.find((de) => de.id === e.id)))
+      store.removeConnections(edgesToDelete.map((e) => e.id))
     },
-    [setEdges]
+    [store]
   )
+
+  // Edges don't need onEdgesChange since they're derived from store
+  // But React Flow expects it - provide a no-op
+  const onEdgesChange: OnEdgesChange = useCallback(() => {}, [])
 
   return {
     nodes,
     edges,
     onNodesChange,
     onEdgesChange,
-    setSourceSchema,
-    setTargetSchema,
+    setSourceSchema: store.setSourceSchema,
+    setTargetSchema: store.setTargetSchema,
     onConnect,
     onEdgesDelete,
     mappedSourcePaths,
