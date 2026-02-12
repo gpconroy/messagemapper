@@ -75,7 +75,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
   }
 
   return (
-    <div className="w-full h-full bg-white border-2 border-gray-300 rounded-lg shadow-lg overflow-hidden flex flex-col">
+    <div className="w-full h-full bg-white border-2 border-gray-300 rounded-lg shadow-lg overflow-visible flex flex-col">
       <NodeResizer
         minWidth={200}
         minHeight={200}
@@ -87,7 +87,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
 
       {/* Header */}
       <div
-        className={`px-4 py-2 flex items-center justify-between ${
+        className={`px-4 py-2 flex items-center justify-between overflow-hidden ${
           data.side === 'source' ? 'bg-blue-50' : 'bg-green-50'
         }`}
       >
@@ -130,7 +130,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
       </div>
 
       {/* Field list - scrollable with nowheel/nopan to prevent React Flow interference */}
-      <div className="flex-1 overflow-y-auto min-h-0 nowheel nopan">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 nowheel nopan">
         {data.fields.length === 0 ? (
           <div className="px-4 py-8 text-center text-gray-500 text-sm">
             No fields loaded

@@ -169,6 +169,7 @@ function FieldTreeItemComponent({
             style={{
               background: mappingStatus === 'mapped' ? '#22c55e' : side === 'source' ? '#2563eb' : '#22c55e',
               borderColor: mappingStatus === 'mapped' ? '#16a34a' : side === 'source' ? '#1e40af' : '#16a34a',
+              zIndex: 10,
             }}
           />
         )}
