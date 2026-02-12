@@ -27,9 +27,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         try {
           const { email, password } = credentialsSchema.parse(credentials)
 
-          const user = await prisma.user.findUnique({
-            where: { email },
-            include: { tenant: true },
+          // Login happens before we know tenant context, so we scope a one-row lookup
+          // using an auth-specific session variable recognized by RLS policy.
+          const user = await prisma.$transaction(async (tx) => {
+            await tx.$executeRaw`SELECT set_config('app.auth_email', ${email}, TRUE)`
+            return tx.user.findUnique({
+              where: { email },
+              include: { tenant: true },
+            })
           })
 
           if (!user || !user.passwordHash) {
