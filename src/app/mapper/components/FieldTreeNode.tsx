@@ -130,7 +130,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
       </div>
 
       {/* Field list - scrollable with nowheel/nopan to prevent React Flow interference */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 nowheel nopan">
+      <div className="flex-1 overflow-y-auto overflow-x-visible min-h-0 nowheel nopan">
         {data.fields.length === 0 ? (
           <div className="px-4 py-8 text-center text-gray-500 text-sm">
             No fields loaded
