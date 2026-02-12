@@ -25,14 +25,15 @@ model Tenant {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  role      String   @default("editor")  // admin, editor, viewer
-  tenantId  String
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String?
+  passwordHash String?  // Argon2id hash, nullable for future OAuth users
+  role         String   @default("editor")  // admin, editor, viewer
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   mappingConfigs MappingConfig[] @relation("CreatedBy")
 
