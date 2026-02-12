@@ -142,18 +142,18 @@ export function useMappingState() {
           labelStyle: hasTransformation
             ? {
                 fill: '#4c1d95',
-                fontWeight: 600,
-                fontSize: 10,
+                fontWeight: 700,
+                fontSize: 12,
               }
             : undefined,
           labelBgStyle: hasTransformation
             ? {
                 fill: '#ddd6fe',
-                fillOpacity: 0.9,
+                fillOpacity: 1,
               }
             : undefined,
-          labelBgPadding: [4, 4] as [number, number],
-          labelBgBorderRadius: 4,
+          labelBgPadding: [6, 6] as [number, number],
+          labelBgBorderRadius: 6,
           data: {
             sourceFieldPath: conn.sourceFieldPath,
             targetFieldPath: conn.targetFieldPath,
