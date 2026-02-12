@@ -1,27 +1,72 @@
 'use client'
 
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import type { Node } from '@xyflow/react'
 import { MappingNodeData } from '@/types/mapping-types'
 import { FieldTreeItem } from './FieldTreeItem'
 import { useFieldTree } from '../hooks/useFieldTree'
 import { MappingStatusContext } from './MappingCanvas'
 import { getMappingStatus } from '../hooks/useMappingState'
+import { SearchInput } from './SearchInput'
+import { useDebounce } from '../hooks/useDebounce'
+import { FieldNode } from '@/types/parser-types'
 
 interface FieldTreeNodeProps {
   id: string
   data: MappingNodeData
 }
 
+/**
+ * Filter fields recursively based on search term.
+ * If a parent matches, all children are shown.
+ * If a child matches, the parent chain is shown.
+ */
+function filterFields(fields: FieldNode[], term: string): FieldNode[] {
+  if (!term) return fields
+  const lower = term.toLowerCase()
+
+  function matches(field: FieldNode): boolean {
+    if (field.name.toLowerCase().includes(lower)) return true
+    return field.children.some(matches)
+  }
+
+  function filter(nodes: FieldNode[]): FieldNode[] {
+    return nodes
+      .filter(matches)
+      .map(node => ({
+        ...node,
+        children: node.name.toLowerCase().includes(lower)
+          ? node.children  // Parent matches: show all children
+          : filter(node.children)  // Only matching children
+      }))
+  }
+
+  return filter(fields)
+}
+
 function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
   const { isExpanded, toggleExpand, expandAll, collapseAll } = useFieldTree(id)
   const { mappedSourcePaths, mappedTargetPaths } = useContext(MappingStatusContext)
 
+  // Search state
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearch = useDebounce(searchTerm, 300)
+
   // Get the appropriate mapped paths set for this side
   const mappedPaths = data.side === 'source' ? mappedSourcePaths : mappedTargetPaths
 
+  // Filter fields based on debounced search term
+  const filteredFields = filterFields(data.fields, debouncedSearch)
+
+  // When search is active with results, auto-expand all filtered paths
+  React.useEffect(() => {
+    if (debouncedSearch && filteredFields.length > 0) {
+      expandAll(filteredFields)
+    }
+  }, [debouncedSearch, filteredFields])
+
   const handleExpandAll = () => {
-    expandAll(data.fields)
+    expandAll(debouncedSearch ? filteredFields : data.fields)
   }
 
   const handleCollapseAll = () => {
@@ -64,15 +109,29 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
         </div>
       </div>
 
+      {/* Search input */}
+      <div className="px-3 py-2 border-b border-gray-200">
+        <SearchInput
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search fields..."
+          side={data.side}
+        />
+      </div>
+
       {/* Field list - scrollable with nowheel/nopan to prevent React Flow interference */}
       <div className="w-72 max-h-[70vh] overflow-y-auto nowheel nopan">
         {data.fields.length === 0 ? (
           <div className="px-4 py-8 text-center text-gray-500 text-sm">
             No fields loaded
           </div>
+        ) : filteredFields.length === 0 ? (
+          <div className="px-4 py-8 text-center text-gray-500 text-sm">
+            No fields match &quot;{debouncedSearch}&quot;
+          </div>
         ) : (
           <div>
-            {data.fields.map((field) => (
+            {filteredFields.map((field) => (
               <FieldTreeItem
                 key={field.id}
                 field={field}
@@ -81,6 +140,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
                 isExpanded={isExpanded}
                 onToggle={toggleExpand}
                 mappingStatus={getMappingStatus(field, mappedPaths)}
+                searchTerm={debouncedSearch}
               />
             ))}
           </div>
