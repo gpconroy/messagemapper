@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useEffect } from 'react'
 import {
   useNodesState,
+  applyEdgeChanges,
   type Node,
   type Edge,
   type OnConnect,
@@ -150,9 +151,18 @@ export function useMappingState() {
     [store]
   )
 
-  // Edges don't need onEdgesChange since they're derived from store
-  // But React Flow expects it - provide a no-op
-  const onEdgesChange: OnEdgesChange = useCallback(() => {}, [])
+  // Handle edge changes - process removals through the store, ignore position updates
+  // (edges are derived from store.connections, so we only need to handle delete events)
+  const onEdgesChange: OnEdgesChange = useCallback(
+    (changes) => {
+      const removals = changes.filter((change) => change.type === 'remove')
+      if (removals.length > 0) {
+        const idsToRemove = removals.map((r) => r.id)
+        store.removeConnections(idsToRemove)
+      }
+    },
+    [store]
+  )
 
   return {
     nodes,

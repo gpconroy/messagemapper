@@ -57,15 +57,6 @@ function FieldTreeItemComponent({
       ? 'bg-amber-400'
       : 'bg-gray-300'
 
-  // Handle colors based on mapping status
-  const handleColor =
-    mappingStatus === 'mapped'
-      ? side === 'source'
-        ? 'bg-green-500 border-green-600'
-        : 'bg-green-500 border-green-600'
-      : side === 'source'
-      ? 'bg-blue-500 border-blue-600'
-      : 'bg-green-500 border-green-600'
 
   // Get type color from mapping (fallback to gray)
   const typeColor = typeColorMap[field.type] || 'bg-gray-100 text-gray-600'
@@ -161,15 +152,22 @@ function FieldTreeItemComponent({
             type={side === 'source' ? 'source' : 'target'}
             position={side === 'source' ? Position.Right : Position.Left}
             id={field.path}
-            className={`!w-3 !h-3 !border-2 ${
-              side === 'source'
-                ? `!right-0 !${handleColor}`
-                : `!left-0 !${handleColor}`
-            }`}
             style={{
+              width: 12,
+              height: 12,
+              border: '2px solid',
+              borderRadius: '50%',
               background: mappingStatus === 'mapped' ? '#22c55e' : side === 'source' ? '#2563eb' : '#22c55e',
               borderColor: mappingStatus === 'mapped' ? '#16a34a' : side === 'source' ? '#1e40af' : '#16a34a',
-              zIndex: 10,
+              zIndex: 50,
+              position: 'absolute',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              ...(side === 'source'
+                ? { right: -6 }
+                : { left: -6 }),
+              cursor: 'crosshair',
+              pointerEvents: 'auto' as const,
             }}
           />
         )}
