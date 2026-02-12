@@ -85,7 +85,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+1. **Complete Phase 3 human verification testing** (testing) — 9 visual/interactive tests need human verification before continuing with plan 03-03
 
 ### Blockers/Concerns
 
