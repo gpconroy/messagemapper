@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { signIn } from "@/auth"
 import { z, ZodError } from "zod"
 import { AuthError } from "next-auth"
+import { Prisma } from "@prisma/client"
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -11,6 +12,38 @@ const signupSchema = z.object({
   name: z.string().min(1, "Name is required"),
   organizationName: z.string().min(1, "Organization name is required"),
 })
+
+function toBaseSlug(input: string): string {
+  const slug = input
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+
+  return slug || "organization"
+}
+
+async function getUniqueTenantSlug(organizationName: string): Promise<string> {
+  const base = toBaseSlug(organizationName)
+  let candidate = base
+  let attempt = 0
+
+  while (attempt < 50) {
+    const existing = await prisma.tenant.findUnique({
+      where: { slug: candidate },
+      select: { id: true },
+    })
+    if (!existing) return candidate
+
+    attempt += 1
+    candidate = `${base}-${attempt}`
+  }
+
+  // Fallback with timestamp to avoid pathological collisions.
+  return `${base}-${Date.now()}`
+}
 
 export async function signup(
   prevState: { error?: string } | null,
@@ -38,15 +71,14 @@ export async function signup(
     const { hashPassword } = await import("@/lib/auth/passwords")
     const passwordHash = await hashPassword(data.password)
 
+    const tenantSlug = await getUniqueTenantSlug(data.organizationName)
+
     // Create tenant and user atomically in transaction
     await prisma.$transaction(async (tx) => {
       const tenant = await tx.tenant.create({
         data: {
           name: data.organizationName,
-          slug: data.organizationName
-            .toLowerCase()
-            .replace(/\s+/g, "-")
-            .replace(/[^a-z0-9-]/g, ""),
+          slug: tenantSlug,
         },
       })
 
@@ -94,6 +126,15 @@ export async function signup(
       (error as { digest: string }).digest.includes("NEXT_REDIRECT")
     ) {
       throw error
+    }
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return { error: "That email or organization is already in use. Please try a different one." }
+      }
+      if (error.code === "P1001" || error.code === "P1002") {
+        return { error: "Database is currently unreachable. Please try again in a moment." }
+      }
     }
 
     console.error("Signup error:", error)
