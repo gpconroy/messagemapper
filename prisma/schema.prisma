@@ -4,8 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Tenant {
@@ -18,6 +19,7 @@ model Tenant {
   users          User[]
   workspaces     Workspace[]
   formatSchemas  FormatSchema[]
+  lookupTables   LookupTable[]
 
   @@map("tenants")
 }
@@ -91,9 +93,59 @@ model MappingConfig {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
+  transformationRules TransformationRule[]
+
   @@index([workspaceId])
   @@index([sourceSchemaId])
   @@index([targetSchemaId])
   @@index([createdById])
   @@map("mapping_configs")
+}
+
+model TransformationRule {
+  id              String   @id @default(uuid())
+  mappingConfigId String
+  type            String   // format_date, format_number, split, concatenate, conditional, lookup, constant, custom_js
+  sourceFields    String[] // Array of source field paths
+  targetField     String   // Target field path
+  config          Json     // Type-specific configuration
+  order           Int      // Execution order, 0-based
+  label           String?  // Optional user-friendly label
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  mappingConfig MappingConfig @relation(fields: [mappingConfigId], references: [id], onDelete: Cascade)
+
+  @@index([mappingConfigId])
+  @@index([mappingConfigId, order])
+  @@map("transformation_rules")
+}
+
+model LookupTable {
+  id          String   @id @default(uuid())
+  name        String   // Lookup table name (e.g., "currency_codes")
+  description String?
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant  Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  entries LookupTableEntry[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@map("lookup_tables")
+}
+
+model LookupTableEntry {
+  id            String @id @default(uuid())
+  lookupTableId String
+  fromValue     String
+  toValue       String
+
+  lookupTable LookupTable @relation(fields: [lookupTableId], references: [id], onDelete: Cascade)
+
+  @@unique([lookupTableId, fromValue])
+  @@index([lookupTableId])
+  @@map("lookup_table_entries")
 }
