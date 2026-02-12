@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation & Infrastructure** - Project scaffolding, database schema, multi-tenant architecture with Row-Level Security
 - [x] **Phase 2: Format Parser Registry** - Pluggable parser architecture with XML and JSON format support
 - [ ] **Phase 3: Visual Mapping Interface** - Side-by-side panel UI with drag-and-drop field connections using React Flow
-- [ ] **Phase 4: Mapping Operations & UX** - Search, filter, expand/collapse, undo/redo, zoom/pan for large schemas
+- [x] **Phase 4: Mapping Operations & UX** - Search, filter, expand/collapse, undo/redo, zoom/pan for large schemas
 - [ ] **Phase 5: Transformation System** - Format conversion, concatenation, splitting, constants, conditional logic, lookup tables, custom JavaScript
 - [ ] **Phase 6: Validation & Testing** - Type mismatch detection, required field validation, mapping preview with sample data
 - [ ] **Phase 7: Platform Features** - Full authentication, role-based access control, workspace management
@@ -86,9 +86,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Search/filter fields by name with debounced input, color-coded type badges, and enhanced required/optional indicators
-- [ ] 04-02-PLAN.md — Undo/redo state management with Zustand + Zundo temporal middleware and toolbar UI
-- [ ] 04-03-PLAN.md — Human verification of all Phase 4 features (search, indicators, undo/redo, zoom/pan)
+- [x] 04-01-PLAN.md — Search/filter fields by name with debounced input, color-coded type badges, and enhanced required/optional indicators
+- [x] 04-02-PLAN.md — Undo/redo state management with Zustand + Zundo temporal middleware and toolbar UI
+- [x] 04-03-PLAN.md — Human verification of all Phase 4 features (search, indicators, undo/redo, zoom/pan)
 
 ### Phase 5: Transformation System
 **Goal**: Enable field transformations beyond simple 1:1 mapping with format conversion, split/concatenate, conditional logic, and lookup tables
