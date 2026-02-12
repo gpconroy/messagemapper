@@ -9,6 +9,8 @@ import { formatDate, formatNumber } from './builtins/format';
 import { splitString, concatenateStrings } from './builtins/string';
 import { applyConditional } from './builtins/conditional';
 import { setConstant } from './builtins/constant';
+import { resolveLookup } from './builtins/lookup';
+import { executeCustomJS } from './custom/sandbox';
 
 /**
  * Transform function registry
@@ -16,31 +18,40 @@ import { setConstant } from './builtins/constant';
 export const transformRegistry = new Map<TransformationType, TransformFunction>();
 
 // Register all built-in transforms
-transformRegistry.set('format_date', formatDate as TransformFunction);
-transformRegistry.set('format_number', formatNumber as TransformFunction);
-transformRegistry.set('split', splitString as TransformFunction);
-transformRegistry.set('concatenate', concatenateStrings as TransformFunction);
-transformRegistry.set('conditional', applyConditional as TransformFunction);
-transformRegistry.set('constant', setConstant as TransformFunction);
+transformRegistry.set('format_date', formatDate as unknown as TransformFunction);
+transformRegistry.set('format_number', formatNumber as unknown as TransformFunction);
+transformRegistry.set('split', splitString as unknown as TransformFunction);
+transformRegistry.set('concatenate', concatenateStrings as unknown as TransformFunction);
+transformRegistry.set('conditional', applyConditional as unknown as TransformFunction);
+transformRegistry.set('constant', setConstant as unknown as TransformFunction);
 
-// Register placeholder functions for not-yet-implemented transforms
-transformRegistry.set('lookup', () => {
-  throw new Error('lookup transform not yet implemented');
-});
+// Register lookup transform
+transformRegistry.set('lookup', resolveLookup as unknown as TransformFunction);
 
-transformRegistry.set('custom_js', () => {
-  throw new Error('custom_js transform not yet implemented');
+// Register custom JS transform with wrapper to match TransformFunction signature
+transformRegistry.set('custom_js', async (input: unknown, config: Record<string, unknown>) => {
+  const code = config.code as string;
+  const timeout = (config.timeout as number) || 5000;
+  const memoryLimit = (config.memoryLimit as number) || 128;
+
+  return executeCustomJS(code, input, { timeout, memoryLimit });
 });
 
 /**
  * Execute a transformation by type
  */
-export function executeTransform(type: TransformationType, input: unknown, config: Record<string, unknown>): unknown {
+export async function executeTransform(
+  type: TransformationType,
+  input: unknown,
+  config: Record<string, unknown>,
+  context?: { prisma?: unknown }
+): Promise<unknown> {
   const transform = transformRegistry.get(type);
 
   if (!transform) {
     throw new Error(`Unknown transformation type: ${type}`);
   }
 
-  return transform(input, config);
+  // Call transform, passing context for lookup
+  return transform(input, config, context);
 }
