@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactFlow, Background, Controls, ConnectionLineType, type Node, type Edge, type OnNodesChange, type OnEdgesChange, type OnConnect, type OnEdgesDelete } from '@xyflow/react'
+import { ReactFlow, Background, Controls, ConnectionLineType, ConnectionMode, type Node, type Edge, type OnNodesChange, type OnEdgesChange, type OnConnect, type OnEdgesDelete } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { useCallback, createContext } from 'react'
 import type { MappingNodeData } from '@/types/mapping-types'
@@ -80,6 +80,7 @@ export function MappingCanvas({
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           isValidConnection={isValidConnection}
+          connectionMode={ConnectionMode.Loose}
           connectionLineType={ConnectionLineType.SmoothStep}
           connectionLineStyle={{ stroke: '#2563eb', strokeWidth: 2 }}
           defaultEdgeOptions={{
