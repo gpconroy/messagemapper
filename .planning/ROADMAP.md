@@ -140,7 +140,10 @@ Plans:
   6. User can create, rename, and organize mapping configurations within workspaces
   7. User can save mapping configurations and load them later
   8. Editor role can create and edit mappings while viewer role has read-only access
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 07-01: TBD during phase planning
+- [ ] 07-01-PLAN.md — Auth.js v5 configuration, Argon2id password hashing, JWT sessions, and middleware route protection
+- [ ] 07-02-PLAN.md — Signup, login, and logout pages with Server Actions and auth UI
+- [ ] 07-03-PLAN.md — RBAC role management, workspace CRUD, and mapping config organization
+- [ ] 07-04-PLAN.md — Workspace-scoped mapper save/load, API route auth migration, and human verification
