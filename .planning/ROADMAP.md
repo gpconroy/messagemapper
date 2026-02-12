@@ -18,8 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 4: Mapping Operations & UX** - Search, filter, expand/collapse, undo/redo, zoom/pan for large schemas
 - [ ] **Phase 5: Transformation System** - Format conversion, concatenation, splitting, constants, conditional logic, lookup tables, custom JavaScript
 - [ ] **Phase 6: Validation & Testing** - Type mismatch detection, required field validation, mapping preview with sample data
-- [ ] **Phase 7: Schema Library Management** - Pre-loaded common schemas and custom schema upload with validation
-- [ ] **Phase 8: Platform Features** - Full authentication, role-based access control, workspace management
+- [ ] **Phase 7: Platform Features** - Full authentication, role-based access control, workspace management
 
 ## Phase Details
 
@@ -120,21 +119,7 @@ Plans:
 Plans:
 - [ ] 06-01: TBD during phase planning
 
-### Phase 7: Schema Library Management
-**Goal**: Enable users to quickly start with pre-loaded common schemas and extend with their own custom formats
-**Depends on**: Phase 2
-**Requirements**: PARS-04, PARS-05, PARS-06, PARS-07
-**Success Criteria** (what must be TRUE):
-  1. User can select source and target formats from a pre-loaded library containing ISO20022 types and TransferMate API schemas
-  2. User can upload custom schema or sample files to add to their workspace library
-  3. User can upload a CSV file and have columns extracted as fields
-  4. User can upload a SQL DDL file and have table/column structure extracted as fields
-**Plans**: TBD
-
-Plans:
-- [ ] 07-01: TBD during phase planning
-
-### Phase 8: Platform Features
+### Phase 7: Platform Features
 **Goal**: Enable multi-tenant SaaS operation with authentication, role-based access control, and workspace management
 **Depends on**: Phase 1
 **Requirements**: PLAT-01, PLAT-02, PLAT-03, PLAT-04, PLAT-05, PLAT-06, PLAT-07, PLAT-08
@@ -150,4 +135,4 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 08-01: TBD during phase planning
+- [ ] 07-01: TBD during phase planning
