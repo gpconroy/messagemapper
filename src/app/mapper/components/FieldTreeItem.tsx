@@ -14,6 +14,20 @@ interface FieldTreeItemProps {
   isExpanded: (path: string) => boolean
   onToggle: (path: string) => void
   mappingStatus?: FieldMappingStatus
+  searchTerm?: string
+}
+
+// Color mapping for different field types
+const typeColorMap: Record<string, string> = {
+  string: 'bg-blue-100 text-blue-700',
+  number: 'bg-purple-100 text-purple-700',
+  integer: 'bg-purple-100 text-purple-700',
+  boolean: 'bg-amber-100 text-amber-700',
+  date: 'bg-teal-100 text-teal-700',
+  object: 'bg-gray-100 text-gray-600',
+  array: 'bg-indigo-100 text-indigo-700',
+  null: 'bg-gray-100 text-gray-500',
+  any: 'bg-gray-100 text-gray-500',
 }
 
 function FieldTreeItemComponent({
@@ -23,6 +37,7 @@ function FieldTreeItemComponent({
   isExpanded,
   onToggle,
   mappingStatus,
+  searchTerm,
 }: FieldTreeItemProps) {
   const hasChildren = field.children.length > 0
   const expanded = isExpanded(field.path)
@@ -50,12 +65,37 @@ function FieldTreeItemComponent({
       ? 'bg-blue-500 border-blue-600'
       : 'bg-green-500 border-green-600'
 
+  // Get type color from mapping (fallback to gray)
+  const typeColor = typeColorMap[field.type] || 'bg-gray-100 text-gray-600'
+
+  // Required field border styling
+  const requiredBorder = field.required ? 'border-l-2 border-l-red-300' : 'border-l-2 border-l-transparent'
+
+  // Highlight search matches in field name
+  const highlightedName = React.useMemo(() => {
+    if (!searchTerm || !field.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return field.name
+    }
+    const lowerName = field.name.toLowerCase()
+    const lowerTerm = searchTerm.toLowerCase()
+    const startIdx = lowerName.indexOf(lowerTerm)
+    const endIdx = startIdx + searchTerm.length
+    return (
+      <>
+        {field.name.substring(0, startIdx)}
+        <mark className="bg-yellow-200 rounded">{field.name.substring(startIdx, endIdx)}</mark>
+        {field.name.substring(endIdx)}
+      </>
+    )
+  }, [field.name, searchTerm])
+
   return (
     <div>
       {/* Field row */}
       <div
-        className="relative flex items-center border-b border-gray-100 hover:bg-blue-50 py-1.5 px-2 group"
+        className={`relative flex items-center border-b border-gray-100 hover:bg-blue-50 py-1.5 px-2 group ${requiredBorder}`}
         style={{ paddingLeft: depth * 16 + 8 }}
+        title={field.required ? 'Required field' : 'Optional field'}
       >
         {/* Mapping status indicator dot */}
         <div
@@ -87,12 +127,12 @@ function FieldTreeItemComponent({
 
         {/* Field name */}
         <span className="font-medium text-sm text-gray-800 flex-1 min-w-0 truncate">
-          {field.name}
+          {highlightedName}
           {field.required && <span className="text-red-500 ml-0.5">*</span>}
         </span>
 
-        {/* Type badge */}
-        <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 ml-2 flex-shrink-0">
+        {/* Type badge with color coding */}
+        <span className={`text-xs px-1.5 py-0.5 rounded ml-2 flex-shrink-0 ${typeColor}`}>
           {field.type}
         </span>
 
@@ -127,6 +167,7 @@ function FieldTreeItemComponent({
               isExpanded={isExpanded}
               onToggle={onToggle}
               mappingStatus={getMappingStatus(child, mappedPaths)}
+              searchTerm={searchTerm}
             />
           ))}
         </div>
