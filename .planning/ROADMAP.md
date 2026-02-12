@@ -86,10 +86,12 @@ Plans:
   3. User can see field data types displayed on each field (string, number, date, boolean)
   4. User can undo and redo mapping actions
   5. User can zoom and pan the mapping canvas for large schemas without browser performance degradation
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 04-01: TBD during phase planning
+- [ ] 04-01-PLAN.md — Search/filter fields by name with debounced input, color-coded type badges, and enhanced required/optional indicators
+- [ ] 04-02-PLAN.md — Undo/redo state management with Zustand + Zundo temporal middleware and toolbar UI
+- [ ] 04-03-PLAN.md — Human verification of all Phase 4 features (search, indicators, undo/redo, zoom/pan)
 
 ### Phase 5: Transformation System
 **Goal**: Enable field transformations beyond simple 1:1 mapping with format conversion, split/concatenate, conditional logic, and lookup tables
