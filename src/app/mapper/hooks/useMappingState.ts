@@ -68,13 +68,15 @@ export function useMappingState() {
           expanded: {},
         },
         draggable: false,
+        width: 288, // w-72 equivalent (18rem = 288px)
+        height: 500,
       })
     }
     if (targetSchema) {
       result.push({
         id: 'target-node',
         type: 'fieldTree',
-        position: { x: 600, y: 0 },
+        position: { x: 700, y: 0 }, // More room for wider source nodes
         data: {
           side: 'target',
           label: targetSchema.label,
@@ -82,6 +84,8 @@ export function useMappingState() {
           expanded: {},
         },
         draggable: false,
+        width: 288,
+        height: 500,
       })
     }
     return result
