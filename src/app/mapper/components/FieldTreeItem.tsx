@@ -149,7 +149,7 @@ function FieldTreeItemComponent({
         {/* Connection handle */}
         {showHandle && (
           <Handle
-            type="source"
+            type={side === 'source' ? 'source' : 'target'}
             position={side === 'source' ? Position.Right : Position.Left}
             id={field.path}
             style={{
