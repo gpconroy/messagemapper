@@ -139,10 +139,11 @@ Recent decisions affecting current work:
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | make the MessageMapper green on the top of the web application | 2026-02-12 | 440e117 | [1-make-the-messagemapper-green-on-the-top-](./quick/1-make-the-messagemapper-green-on-the-top-/) |
+| 2 | add direct passthrough transformation type for 1:1 field mapping | 2026-02-12 | 49baa1e | [2-in-some-cases-i-simply-want-to-map-one-f](./quick/2-in-some-cases-i-simply-want-to-map-one-f/) |
 
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 05-05-PLAN.md (Transformation UI)
+Stopped at: Completed quick task 2 (direct mapping transformation)
 Resume file: None
 Next: Continue Phase 5 with plan 05-06 (Transformation Integration)
