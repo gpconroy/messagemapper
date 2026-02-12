@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 // Valid transformation types
 const TRANSFORMATION_TYPES = [
+  'direct',
   'format_date',
   'format_number',
   'split',

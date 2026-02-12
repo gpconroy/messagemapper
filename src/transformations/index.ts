@@ -9,6 +9,7 @@ export type {
   TransformationType,
   TransformFunction,
   TransformationRule,
+  DirectConfig,
   DateFormatConfig,
   NumberFormatConfig,
   SplitConfig,
@@ -34,6 +35,7 @@ export { applyTransformations } from './pipeline';
 // Validator
 export {
   TransformationRuleSchema,
+  DirectConfigSchema,
   DateFormatConfigSchema,
   NumberFormatConfigSchema,
   SplitConfigSchema,

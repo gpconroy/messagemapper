@@ -5,6 +5,7 @@
  */
 
 import type { TransformationType, TransformFunction } from './types';
+import { directMap } from './builtins/direct';
 import { formatDate, formatNumber } from './builtins/format';
 import { splitString, concatenateStrings } from './builtins/string';
 import { applyConditional } from './builtins/conditional';
@@ -18,6 +19,7 @@ import { executeCustomJS } from './custom/sandbox';
 export const transformRegistry = new Map<TransformationType, TransformFunction>();
 
 // Register all built-in transforms
+transformRegistry.set('direct', directMap as unknown as TransformFunction);
 transformRegistry.set('format_date', formatDate as unknown as TransformFunction);
 transformRegistry.set('format_number', formatNumber as unknown as TransformFunction);
 transformRegistry.set('split', splitString as unknown as TransformFunction);

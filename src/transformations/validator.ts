@@ -13,6 +13,7 @@ import type { TransformationRule } from './types';
 export const TransformationRuleSchema = z.object({
   id: z.string(),
   type: z.enum([
+    'direct',
     'format_date',
     'format_number',
     'split',
@@ -27,6 +28,11 @@ export const TransformationRuleSchema = z.object({
   config: z.record(z.string(), z.unknown()),
   order: z.number().int().min(0),
 });
+
+/**
+ * Direct mapping configuration schema
+ */
+export const DirectConfigSchema = z.object({});
 
 /**
  * Date format configuration schema
@@ -110,6 +116,7 @@ export const CustomJSConfigSchema = z.object({
  * Config schema map by type
  */
 const configSchemaMap = {
+  direct: DirectConfigSchema,
   format_date: DateFormatConfigSchema,
   format_number: NumberFormatConfigSchema,
   split: SplitConfigSchema,

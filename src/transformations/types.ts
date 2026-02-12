@@ -9,6 +9,7 @@
  * All supported transformation types
  */
 export type TransformationType =
+  | 'direct'
   | 'format_date'
   | 'format_number'
   | 'split'
@@ -23,7 +24,8 @@ export type TransformationType =
  */
 export type TransformFunction = (
   input: unknown,
-  config: Record<string, unknown>
+  config: Record<string, unknown>,
+  context?: { prisma?: unknown }
 ) => unknown | Promise<unknown>;
 
 /**
@@ -89,4 +91,26 @@ export interface ConditionalConfig {
  */
 export interface ConstantConfig {
   value: unknown;
+}
+
+/**
+ * Lookup table configuration
+ */
+export interface LookupConfig {
+  tableName: string;
+  defaultValue?: unknown;
+}
+
+/**
+ * Direct mapping configuration
+ */
+export interface DirectConfig {}
+
+/**
+ * Custom JavaScript configuration
+ */
+export interface CustomJSConfig {
+  code: string;
+  timeout?: number;
+  memoryLimit?: number;
 }
