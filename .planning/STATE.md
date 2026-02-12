@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 4 of 10 (Mapping Operations UX)
-Plan: 1 of 3 in current phase (04-01 complete)
+Plan: 2 of 3 in current phase (04-01, 04-02 complete)
 Status: In Progress
-Last activity: 2026-02-12 — Completed plan 04-01 (Search/filter and enhanced visual indicators)
+Last activity: 2026-02-12 — Completed plan 04-02 (Undo/redo with temporal middleware)
 
-Progress: [██████░░░░] 60%
+Progress: [███████░░░] 64%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: ~453s (7.5 minutes)
-- Total execution time: ~2.2 hours
+- Total plans completed: 11
+- Average duration: ~446s (7.4 minutes)
+- Total execution time: ~2.3 hours
 
 **By Phase:**
 
@@ -30,7 +30,7 @@ Progress: [██████░░░░] 60%
 | 01 | 3/3 | ✅ Complete |
 | 02 | 3/3 | ✅ Complete |
 | 03 | 3/4 | 🔄 In Progress |
-| 04 | 1/3 | 🔄 In Progress |
+| 04 | 2/3 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
@@ -45,6 +45,7 @@ Progress: [██████░░░░] 60%
 | 03-02 | 252s | 2 | 4 |
 | 03-04 | 180s | 1 | 2 |
 | 04-01 | 261s | 2 | 4 |
+| 04-02 | 411s | 2 | 5 |
 
 ## Accumulated Context
 
@@ -89,6 +90,11 @@ Recent decisions affecting current work:
 - Plan 04-01: Auto-expand matching paths when search is active for immediate visibility
 - Plan 04-01: Type color map provides distinct colors per type (8 types with unique colors)
 - Plan 04-01: Required fields use red left border plus asterisk for dual visual reinforcement
+- Plan 04-02: Zustand with Zundo temporal middleware for undo/redo instead of custom history implementation
+- Plan 04-02: Only connections tracked in undo/redo history, not schema state (partialize limits tracking)
+- Plan 04-02: 50-entry history limit prevents unbounded memory growth
+- Plan 04-02: useMappingState acts as bridge between Zustand store and React Flow interface
+- Plan 04-02: Support both Ctrl+Shift+Z and Ctrl+Y for redo (cross-platform conventions)
 
 ### Pending Todos
 
@@ -114,6 +120,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 04-01-PLAN.md (Search/filter and enhanced visual indicators)
+Stopped at: Completed 04-02-PLAN.md (Undo/redo with temporal middleware)
 Resume file: None
-Next: Plan 04-02
+Next: Plan 04-03
