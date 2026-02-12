@@ -178,45 +178,46 @@ describe('setConstant', () => {
 });
 
 describe('executeTransform', () => {
-  it('dispatches to formatDate transform', () => {
-    const result = executeTransform('format_date', '2026-02-12', { to: 'MM/dd/yyyy' });
+  it('dispatches to formatDate transform', async () => {
+    const result = await executeTransform('format_date', '2026-02-12', { to: 'MM/dd/yyyy' });
     expect(result).toBe('02/12/2026');
   });
 
-  it('dispatches to formatNumber transform', () => {
-    const result = executeTransform('format_number', 1234.56, { type: 'number', locale: 'en-US' });
+  it('dispatches to formatNumber transform', async () => {
+    const result = await executeTransform('format_number', 1234.56, { type: 'number', locale: 'en-US' });
     expect(result).toBe('1,234.56');
   });
 
-  it('dispatches to split transform', () => {
-    const result = executeTransform('split', 'a,b,c', { delimiter: ',' });
+  it('dispatches to split transform', async () => {
+    const result = await executeTransform('split', 'a,b,c', { delimiter: ',' });
     expect(result).toEqual(['a', 'b', 'c']);
   });
 
-  it('dispatches to concatenate transform', () => {
-    const result = executeTransform('concatenate', ['a', 'b'], { separator: '-' });
+  it('dispatches to concatenate transform', async () => {
+    const result = await executeTransform('concatenate', ['a', 'b'], { separator: '-' });
     expect(result).toBe('a-b');
   });
 
-  it('dispatches to conditional transform', () => {
-    const result = executeTransform('conditional', 'test', { operator: 'equals', value: 'test', thenValue: 1, elseValue: 0 });
+  it('dispatches to conditional transform', async () => {
+    const result = await executeTransform('conditional', 'test', { operator: 'equals', value: 'test', thenValue: 1, elseValue: 0 });
     expect(result).toBe(1);
   });
 
-  it('dispatches to constant transform', () => {
-    const result = executeTransform('constant', null, { value: 'fixed' });
+  it('dispatches to constant transform', async () => {
+    const result = await executeTransform('constant', null, { value: 'fixed' });
     expect(result).toBe('fixed');
   });
 
-  it('throws error on unknown transformation type', () => {
-    expect(() => executeTransform('unknown_type' as any, 'x', {})).toThrow('Unknown transformation type: unknown_type');
+  it('throws error on unknown transformation type', async () => {
+    await expect(executeTransform('unknown_type' as any, 'x', {})).rejects.toThrow('Unknown transformation type: unknown_type');
   });
 
-  it('throws "not yet implemented" for lookup transform', () => {
-    expect(() => executeTransform('lookup', 'key', {})).toThrow('not yet implemented');
+  it('requires Prisma context for lookup transform', async () => {
+    await expect(executeTransform('lookup', 'key', { tableName: 'test' })).rejects.toThrow('Lookup transform requires Prisma client in context');
   });
 
-  it('throws "not yet implemented" for custom_js transform', () => {
-    expect(() => executeTransform('custom_js', 'code', {})).toThrow('not yet implemented');
+  it('executes custom_js transform', async () => {
+    const result = await executeTransform('custom_js', 10, { code: 'return input * 2' });
+    expect(result).toBe(20);
   });
 });
