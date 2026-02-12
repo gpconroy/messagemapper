@@ -150,10 +150,11 @@ Recent decisions affecting current work:
 | 1 | make the MessageMapper green on the top of the web application | 2026-02-12 | 440e117 | [1-make-the-messagemapper-green-on-the-top-](./quick/1-make-the-messagemapper-green-on-the-top-/) |
 | 2 | add direct passthrough transformation type for 1:1 field mapping | 2026-02-12 | 49baa1e | [2-in-some-cases-i-simply-want-to-map-one-f](./quick/2-in-some-cases-i-simply-want-to-map-one-f/) |
 | 3 | fix blank space beside field tree scrollbar | 2026-02-12 | 9cc8918 | [3-in-the-loaded-files-there-is-a-vertical-](./quick/3-in-the-loaded-files-there-is-a-vertical-/) |
+| 4 | add resize capability to field tree boxes | 2026-02-12 | 36c48ed | [4-i-need-to-be-able-to-resize-the-boxes-wh](./quick/4-i-need-to-be-able-to-resize-the-boxes-wh/) |
 
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed plan 06-03 (Validation Feedback UI)
+Stopped at: Completed quick task 4 (Resizable Field Tree Boxes)
 Resume file: None
 Next: Continue Phase 6 with plan 06-04 (Human Verification)
