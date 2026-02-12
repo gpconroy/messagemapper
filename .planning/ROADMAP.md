@@ -102,10 +102,15 @@ Plans:
   5. User can define conditional mapping rules where if source field equals X, map to Y, otherwise map to Z
   6. User can create and manage lookup tables for code translation between systems
   7. User can write custom JavaScript transformation functions for edge cases with sandbox isolation
-**Plans**: TBD
+**Plans:** 6 plans
 
 Plans:
-- [ ] 05-01: TBD during phase planning
+- [ ] 05-01-PLAN.md — Transformation types, function registry, and built-in transform functions with TDD (format, split, concat, conditional, constant)
+- [ ] 05-02-PLAN.md — Database models (TransformationRule, LookupTable) and CRUD API routes
+- [ ] 05-03-PLAN.md — Custom JavaScript sandbox with isolated-vm and TDD security tests
+- [ ] 05-04-PLAN.md — Transformation pipeline orchestrator, Zod validation, and preview API endpoint
+- [ ] 05-05-PLAN.md — Transformation configuration UI dialog with per-type config forms
+- [ ] 05-06-PLAN.md — Canvas integration, lookup table management UI, custom JS editor, and human verification
 
 ### Phase 6: Validation & Testing
 **Goal**: Provide validation feedback and testing capabilities so users can verify mapping correctness before production use
