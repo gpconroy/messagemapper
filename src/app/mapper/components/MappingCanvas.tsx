@@ -6,6 +6,8 @@ import { useCallback, createContext } from 'react'
 import type { MappingNodeData } from '@/types/mapping-types'
 import { FieldTreeNode } from './FieldTreeNode'
 import { isValidMappingConnection } from '../lib/validation'
+import { TransformationDialog } from './TransformationDialog'
+import { useMappingStore } from '../store/useMappingStore'
 
 // Define nodeTypes at module level to prevent React Flow warning about changing nodeTypes
 const nodeTypes = { fieldTree: FieldTreeNode }
@@ -40,12 +42,22 @@ export function MappingCanvas({
   mappedSourcePaths,
   mappedTargetPaths,
 }: MappingCanvasProps) {
+  const setSelectedConnectionId = useMappingStore((state) => state.setSelectedConnectionId)
+
   // Wrap validation function with current nodes and edges
   const isValidConnection = useCallback(
     (connection: any) => {
       return isValidMappingConnection(connection, nodes, edges)
     },
     [nodes, edges]
+  )
+
+  // Handle edge click to open transformation dialog
+  const handleEdgeClick = useCallback(
+    (_event: React.MouseEvent, edge: Edge) => {
+      setSelectedConnectionId(edge.id)
+    },
+    [setSelectedConnectionId]
   )
 
   return (
@@ -58,6 +70,7 @@ export function MappingCanvas({
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onEdgesDelete={onEdgesDelete}
+          onEdgeClick={handleEdgeClick}
           nodeTypes={nodeTypes}
           isValidConnection={isValidConnection}
           connectionLineStyle={{ stroke: '#2563eb', strokeWidth: 2 }}
@@ -73,6 +86,7 @@ export function MappingCanvas({
           <Background />
           <Controls />
         </ReactFlow>
+        <TransformationDialog />
       </MappingStatusContext.Provider>
     </div>
   )

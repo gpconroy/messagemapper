@@ -8,6 +8,8 @@ import { NumberFormatForm } from './config-forms/NumberFormatForm'
 import { StringOpForm } from './config-forms/StringOpForm'
 import { ConditionalForm } from './config-forms/ConditionalForm'
 import { ConstantForm } from './config-forms/ConstantForm'
+import { LookupForm } from './config-forms/LookupForm'
+import { CustomJSForm } from './config-forms/CustomJSForm'
 
 interface TransformationTypeOption {
   value: TransformationType
@@ -21,6 +23,8 @@ const TRANSFORMATION_TYPES: TransformationTypeOption[] = [
   { value: 'concatenate', label: 'Concatenate' },
   { value: 'conditional', label: 'Conditional Logic' },
   { value: 'constant', label: 'Constant Value' },
+  { value: 'lookup', label: 'Lookup Table' },
+  { value: 'custom_js', label: 'Custom JavaScript' },
 ]
 
 /**
@@ -112,6 +116,10 @@ export function TransformationDialog() {
         return <ConditionalForm config={config} onChange={setConfig} />
       case 'constant':
         return <ConstantForm config={config} onChange={setConfig} />
+      case 'lookup':
+        return <LookupForm config={config} onChange={setConfig} />
+      case 'custom_js':
+        return <CustomJSForm config={config} onChange={setConfig} />
       default:
         return <div className="text-gray-500">No configuration needed for this transformation type.</div>
     }

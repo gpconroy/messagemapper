@@ -13,6 +13,7 @@ import {
 import { FieldNode } from '@/types/parser-types'
 import { MappingNodeData, MappingEdgeData, FieldMappingStatus } from '@/types/mapping-types'
 import { useMappingStore } from '../store/useMappingStore'
+import { TransformationType } from '@/transformations/types'
 
 /**
  * Recursively collects all leaf field paths from a field tree
@@ -22,6 +23,32 @@ function getLeafPaths(field: FieldNode): string[] {
     return [field.path]
   }
   return field.children.flatMap(getLeafPaths)
+}
+
+/**
+ * Get transformation type abbreviation for edge labels
+ */
+function getTransformationAbbreviation(type: TransformationType): string {
+  switch (type) {
+    case 'format_date':
+      return 'Dt'
+    case 'format_number':
+      return '#'
+    case 'split':
+      return 'Split'
+    case 'concatenate':
+      return 'Join'
+    case 'conditional':
+      return 'If'
+    case 'constant':
+      return '='
+    case 'lookup':
+      return 'Lkp'
+    case 'custom_js':
+      return 'JS'
+    default:
+      return '?'
+  }
 }
 
 /**
@@ -98,20 +125,41 @@ export function useMappingState() {
   // Build edges from connections
   const edges: Edge[] = useMemo(
     () =>
-      connections.map((conn) => ({
-        id: conn.id,
-        source: 'source-node',
-        target: 'target-node',
-        sourceHandle: conn.sourceFieldPath,
-        targetHandle: conn.targetFieldPath,
-        type: 'smoothstep',
-        animated: true,
-        style: { stroke: '#2563eb', strokeWidth: 2 },
-        data: {
-          sourceFieldPath: conn.sourceFieldPath,
-          targetFieldPath: conn.targetFieldPath,
-        },
-      })),
+      connections.map((conn) => {
+        const hasTransformation = !!conn.transformation
+        return {
+          id: conn.id,
+          source: 'source-node',
+          target: 'target-node',
+          sourceHandle: conn.sourceFieldPath,
+          targetHandle: conn.targetFieldPath,
+          type: 'smoothstep',
+          animated: true,
+          style: hasTransformation
+            ? { stroke: '#7c3aed', strokeWidth: 2 } // Purple for transformed edges
+            : { stroke: '#2563eb', strokeWidth: 2 }, // Blue for plain edges
+          label: hasTransformation && conn.transformation ? getTransformationAbbreviation(conn.transformation.type) : undefined,
+          labelStyle: hasTransformation
+            ? {
+                fill: '#4c1d95',
+                fontWeight: 600,
+                fontSize: 10,
+              }
+            : undefined,
+          labelBgStyle: hasTransformation
+            ? {
+                fill: '#ddd6fe',
+                fillOpacity: 0.9,
+              }
+            : undefined,
+          labelBgPadding: [4, 4] as [number, number],
+          labelBgBorderRadius: 4,
+          data: {
+            sourceFieldPath: conn.sourceFieldPath,
+            targetFieldPath: conn.targetFieldPath,
+          },
+        }
+      }),
     [connections]
   )
 
