@@ -151,10 +151,11 @@ Recent decisions affecting current work:
 | 2 | add direct passthrough transformation type for 1:1 field mapping | 2026-02-12 | 49baa1e | [2-in-some-cases-i-simply-want-to-map-one-f](./quick/2-in-some-cases-i-simply-want-to-map-one-f/) |
 | 3 | fix blank space beside field tree scrollbar | 2026-02-12 | 9cc8918 | [3-in-the-loaded-files-there-is-a-vertical-](./quick/3-in-the-loaded-files-there-is-a-vertical-/) |
 | 4 | add resize capability to field tree boxes | 2026-02-12 | 36c48ed | [4-i-need-to-be-able-to-resize-the-boxes-wh](./quick/4-i-need-to-be-able-to-resize-the-boxes-wh/) |
+| 6 | fix broken field-to-field connection drawing after NodeResizer | 2026-02-12 | 60c3eca | [6-something-has-gone-wrong-i-can-no-longer](./quick/6-something-has-gone-wrong-i-can-no-longer/) |
 
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed quick task 4 (Resizable Field Tree Boxes)
+Stopped at: Completed quick task 6 (Restore Field Connection Drawing)
 Resume file: None
 Next: Continue Phase 6 with plan 06-04 (Human Verification)
