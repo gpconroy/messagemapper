@@ -46,7 +46,7 @@ function filterFields(fields: FieldNode[], term: string): FieldNode[] {
 
 function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
   const { isExpanded, toggleExpand, expandAll, collapseAll } = useFieldTree(id)
-  const { mappedSourcePaths, mappedTargetPaths } = useContext(MappingStatusContext)
+  const { mappedSourcePaths, mappedTargetPaths, validationErrors } = useContext(MappingStatusContext)
 
   // Search state
   const [searchTerm, setSearchTerm] = useState('')
@@ -141,6 +141,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
                 onToggle={toggleExpand}
                 mappingStatus={getMappingStatus(field, mappedPaths)}
                 searchTerm={debouncedSearch}
+                validationErrors={validationErrors}
               />
             ))}
           </div>

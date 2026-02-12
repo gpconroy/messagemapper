@@ -14,13 +14,15 @@ import { useMappingStore } from '../store/useMappingStore'
 const nodeTypes = { fieldTree: FieldTreeNode }
 const edgeTypes = { transformation: TransformationEdge }
 
-// Context for providing mapped paths to field tree nodes
+// Context for providing mapped paths and validation errors to field tree nodes
 export const MappingStatusContext = createContext<{
   mappedSourcePaths: Set<string>
   mappedTargetPaths: Set<string>
+  validationErrors: Map<string, Array<{ type: string; message: string; severity: string }>>
 }>({
   mappedSourcePaths: new Set(),
   mappedTargetPaths: new Set(),
+  validationErrors: new Map(),
 })
 
 interface MappingCanvasProps {
@@ -32,6 +34,7 @@ interface MappingCanvasProps {
   onEdgesDelete: OnEdgesDelete
   mappedSourcePaths: Set<string>
   mappedTargetPaths: Set<string>
+  validationErrors?: Map<string, Array<{ type: string; message: string; severity: string }>>
 }
 
 export function MappingCanvas({
@@ -43,6 +46,7 @@ export function MappingCanvas({
   onEdgesDelete,
   mappedSourcePaths,
   mappedTargetPaths,
+  validationErrors = new Map(),
 }: MappingCanvasProps) {
   const setSelectedConnectionId = useMappingStore((state) => state.setSelectedConnectionId)
 
@@ -64,7 +68,7 @@ export function MappingCanvas({
 
   return (
     <div className="w-full h-full">
-      <MappingStatusContext.Provider value={{ mappedSourcePaths, mappedTargetPaths }}>
+      <MappingStatusContext.Provider value={{ mappedSourcePaths, mappedTargetPaths, validationErrors }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}

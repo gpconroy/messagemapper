@@ -15,6 +15,7 @@ interface FieldTreeItemProps {
   onToggle: (path: string) => void
   mappingStatus?: FieldMappingStatus
   searchTerm?: string
+  validationErrors?: Map<string, Array<{ type: string; message: string; severity: string }>>
 }
 
 // Color mapping for different field types
@@ -38,6 +39,7 @@ function FieldTreeItemComponent({
   onToggle,
   mappingStatus,
   searchTerm,
+  validationErrors,
 }: FieldTreeItemProps) {
   const hasChildren = field.children.length > 0
   const expanded = isExpanded(field.path)
@@ -70,6 +72,12 @@ function FieldTreeItemComponent({
 
   // Required field border styling
   const requiredBorder = field.required ? 'border-l-2 border-l-red-300' : 'border-l-2 border-l-transparent'
+
+  // Get validation errors for this field
+  const fieldValidationErrors = validationErrors?.get(field.path) || []
+  const hasError = fieldValidationErrors.some(e => e.severity === 'error')
+  const hasWarning = fieldValidationErrors.some(e => e.severity === 'warning')
+  const errorMessage = fieldValidationErrors.map(e => e.message).join('; ')
 
   // Highlight search matches in field name
   const highlightedName = React.useMemo(() => {
@@ -126,9 +134,20 @@ function FieldTreeItemComponent({
         {!hasChildren && <span className="w-4 mr-1.5" />}
 
         {/* Field name */}
-        <span className="font-medium text-sm text-gray-800 flex-1 min-w-0 truncate">
-          {highlightedName}
-          {field.required && <span className="text-red-500 ml-0.5">*</span>}
+        <span className="font-medium text-sm text-gray-800 flex-1 min-w-0 truncate flex items-center gap-1.5">
+          <span className="truncate">
+            {highlightedName}
+            {field.required && <span className="text-red-500 ml-0.5">*</span>}
+          </span>
+          {/* Validation error indicator */}
+          {(hasError || hasWarning) && (
+            <span
+              className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                hasError ? 'bg-red-500' : 'bg-yellow-500'
+              }`}
+              title={errorMessage}
+            />
+          )}
         </span>
 
         {/* Type badge with color coding */}
@@ -168,6 +187,7 @@ function FieldTreeItemComponent({
               onToggle={onToggle}
               mappingStatus={getMappingStatus(child, mappedPaths)}
               searchTerm={searchTerm}
+              validationErrors={validationErrors}
             />
           ))}
         </div>
