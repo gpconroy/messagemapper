@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { applyTransformations } from '@/transformations';
+import { auth } from '@/auth';
 
 /**
  * POST /api/transformations/preview
@@ -8,6 +9,11 @@ import { applyTransformations } from '@/transformations';
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
     const { rules, sampleData } = body;
 

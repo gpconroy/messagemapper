@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-
-// Hardcoded dev tenant ID for now (auth not yet built)
-// This will be replaced with actual session-based tenant ID in Phase 7
-const DEV_TENANT_ID = '00000000-0000-0000-0000-000000000001';
+import { auth } from '@/auth';
 
 /**
- * GET /api/lookup-tables?tenantId={id}
+ * GET /api/lookup-tables
  * Returns all lookup tables for a tenant with entry counts
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const tenantId = searchParams.get('tenantId') || DEV_TENANT_ID;
+    const session = await auth();
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const tenantId = session.user.tenantId;
 
     const tables = await prisma.lookupTable.findMany({
       where: { tenantId },
@@ -52,8 +53,13 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
-    const { name, description, tenantId } = body;
+    const { name, description } = body;
 
     // Validate required fields
     if (!name || typeof name !== 'string' || name.trim() === '') {
@@ -63,8 +69,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use provided tenantId or fallback to dev tenant
-    const finalTenantId = tenantId || DEV_TENANT_ID;
+    const finalTenantId = session.user.tenantId;
 
     // Create lookup table
     try {

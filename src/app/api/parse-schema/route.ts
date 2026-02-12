@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parserRegistry } from '@/lib/parsers';
 import type { ParserResult, ParserType } from '@/types/parser-types';
+import { auth } from '@/auth';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     // Extract file from FormData
     const formData = await request.formData();
     const file = formData.get('file') as File | null;

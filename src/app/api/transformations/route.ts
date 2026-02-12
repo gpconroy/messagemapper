@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/auth';
 
 // Valid transformation types
 const TRANSFORMATION_TYPES = [
@@ -22,6 +23,11 @@ type TransformationType = typeof TRANSFORMATION_TYPES[number];
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const mappingConfigId = searchParams.get('mappingConfigId');
 
@@ -54,6 +60,11 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
     const { mappingConfigId, type, sourceFields, targetField, config, order, label } = body;
 

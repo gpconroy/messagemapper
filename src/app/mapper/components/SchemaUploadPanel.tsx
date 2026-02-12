@@ -6,7 +6,7 @@ import { FieldNode, ParserResult } from '@/types/parser-types'
 
 interface SchemaUploadPanelProps {
   side: MappingSide
-  onSchemaLoaded: (fields: FieldNode[], fileName: string) => void
+  onSchemaLoaded: (fields: FieldNode[], fileName: string, formatType?: string) => void
 }
 
 export function SchemaUploadPanel({ side, onSchemaLoaded }: SchemaUploadPanelProps) {
@@ -41,7 +41,7 @@ export function SchemaUploadPanel({ side, onSchemaLoaded }: SchemaUploadPanelPro
         throw new Error(result.errors.join(', '))
       }
 
-      onSchemaLoaded(result.fieldNodes, file.name)
+      onSchemaLoaded(result.fieldNodes, file.name, result.parserType)
       setLoadedFile(file.name)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred')

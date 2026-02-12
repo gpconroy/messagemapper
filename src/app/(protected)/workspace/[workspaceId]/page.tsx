@@ -64,10 +64,10 @@ export default async function WorkspacePage({
 
         <div className="flex items-center space-x-3">
           <Link
-            href="/mapper"
+            href={`/workspace/${workspaceId}/mapper`}
             className="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
-            Open Mapper
+            New Mapping
           </Link>
         </div>
       </div>
@@ -162,7 +162,7 @@ export default async function WorkspacePage({
                     {userCanEdit && (
                       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                         <Link
-                          href={`/mapper?config=${config.id}`}
+                          href={`/workspace/${workspaceId}/mapper/${config.id}`}
                           className="text-green-600 hover:text-green-900"
                         >
                           Open
