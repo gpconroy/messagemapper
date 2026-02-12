@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 5 of 7 (Transformation System)
-Plan: 3 of 6 in current phase (05-01, 05-02, 05-03 complete)
+Plan: 1 of 6 in current phase (05-01 complete)
 Status: In Progress
-Last activity: 2026-02-12 — Completed plan 05-02 (Database models and API routes for transformations and lookup tables)
+Last activity: 2026-02-12 — Completed plan 05-01 (Built-in Transformation Functions)
 
-Progress: [████████░░] 75%
+Progress: [█████████░] 73%
 
 ## Performance Metrics
 
 **Velocity:**
 - Total plans completed: 13
-- Average duration: ~380s (6.3 minutes)
-- Total execution time: ~2.5 hours
+- Average duration: ~407s (6.8 minutes)
+- Total execution time: ~2.9 hours
 
 **By Phase:**
 
@@ -31,7 +31,7 @@ Progress: [████████░░] 75%
 | 02 | 3/3 | ✅ Complete |
 | 03 | 3/4 | 🔄 In Progress |
 | 04 | 3/3 | ✅ Complete |
-| 05 | 3/6 | 🔄 In Progress |
+| 05 | 1/6 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
@@ -43,9 +43,7 @@ Progress: [████████░░] 75%
 | 04-01 | 261s | 2 | 4 |
 | 04-02 | 411s | 2 | 5 |
 | 04-03 | 2 min | 1 | 1 |
-| 05-01 | 495s | 2 | 9 |
-| 05-02 | 8 min | 2 | 4 |
-| 05-03 | 353s | 1 (TDD) | 4 |
+| 05-01 | 1493s (25 min) | 1 (TDD) | 7 |
 
 ## Accumulated Context
 
@@ -96,6 +94,11 @@ Recent decisions affecting current work:
 - Plan 04-02: useMappingState acts as bridge between Zustand store and React Flow interface
 - Plan 04-02: Support both Ctrl+Shift+Z and Ctrl+Y for redo (cross-platform conventions)
 - Plan 04-03: All Phase 4 UX enhancements verified working by human tester (search/filter, visual indicators, undo/redo, zoom/pan)
+- Plan 05-01: Used date-fns instead of moment.js (not deprecated, modern ESM support)
+- Plan 05-01: Used native Intl.NumberFormat for number/currency formatting (97%+ browser support, no library needed)
+- Plan 05-01: Implemented ReDoS protection via regex pattern whitelist for string split operations
+- Plan 05-01: All transform functions are pure (no side effects, no DB access) for composability
+- Plan 05-01: Strict type checking with descriptive errors (fail fast on invalid input)
 - Plan 05-02: Used Json type for TransformationRule.config to support type-specific configuration flexibility
 - Plan 05-02: Added order field to TransformationRule for deterministic pipeline execution
 - Plan 05-02: Enforced unique constraint on (tenantId, name) for LookupTable to prevent duplicate names per tenant
@@ -130,6 +133,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 05-02-PLAN.md (Database models and API routes for transformations and lookup tables)
+Stopped at: Completed 05-01-PLAN.md (Built-in Transformation Functions)
 Resume file: None
-Next: Continue Phase 5 with plan 05-04 (Transformation pipeline orchestrator)
+Next: Continue Phase 5 with plan 05-02 (Transformation API)
