@@ -74,7 +74,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
   }
 
   return (
-    <div className="bg-white border-2 border-gray-300 rounded-lg shadow-lg overflow-hidden">
+    <div className="w-72 bg-white border-2 border-gray-300 rounded-lg shadow-lg overflow-hidden">
       {/* Header */}
       <div
         className={`px-4 py-2 flex items-center justify-between ${
@@ -120,7 +120,7 @@ function FieldTreeNodeComponent({ id, data }: FieldTreeNodeProps) {
       </div>
 
       {/* Field list - scrollable with nowheel/nopan to prevent React Flow interference */}
-      <div className="w-72 max-h-[70vh] overflow-y-auto nowheel nopan">
+      <div className="max-h-[70vh] overflow-y-auto nowheel nopan">
         {data.fields.length === 0 ? (
           <div className="px-4 py-8 text-center text-gray-500 text-sm">
             No fields loaded
