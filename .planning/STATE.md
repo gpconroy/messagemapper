@@ -154,10 +154,11 @@ Recent decisions affecting current work:
 | 3 | fix blank space beside field tree scrollbar | 2026-02-12 | 9cc8918 | [3-in-the-loaded-files-there-is-a-vertical-](./quick/3-in-the-loaded-files-there-is-a-vertical-/) |
 | 4 | add resize capability to field tree boxes | 2026-02-12 | 36c48ed | [4-i-need-to-be-able-to-resize-the-boxes-wh](./quick/4-i-need-to-be-able-to-resize-the-boxes-wh/) |
 | 6 | fix broken field-to-field connection drawing after NodeResizer | 2026-02-12 | 60c3eca | [6-something-has-gone-wrong-i-can-no-longer](./quick/6-something-has-gone-wrong-i-can-no-longer/) |
+| 7 | the validation should happen by uploading a sample file with values for the source file and outputting the target file | 2026-02-12 | 79f7b9e | [7-the-validation-should-happen-by-uploadin](./quick/7-the-validation-should-happen-by-uploadin/) |
 
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed plan 06-04 (Human Verification) - Phase 6 complete
+Stopped at: Completed quick task 7 (File Upload Sample Data Preview)
 Resume file: None
 Next: Begin Phase 7 (Auth & Multi-tenancy)
