@@ -1,98 +1,148 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { FieldNode } from '@/types/parser-types'
-import { useDebounce } from '../hooks/useDebounce'
+import React, { useState } from 'react'
 
 interface SampleDataInputProps {
-  value: string
-  onChange: (value: string) => void
-  onParsed: (data: Record<string, unknown>) => void
-  sourceFields?: FieldNode[]
+  onFileLoaded: (values: Record<string, unknown>, fileName: string) => void
+  isLoading?: boolean
 }
 
 /**
- * JSON textarea input component for entering sample data.
- * Provides real-time JSON validation with visual feedback.
+ * File upload component for entering sample data.
+ * Accepts JSON and XML files, parses them via API, and returns flat path-value map.
  */
-export function SampleDataInput({ value, onChange, onParsed, sourceFields }: SampleDataInputProps) {
-  const [parseError, setParseError] = useState<string | null>(null)
-  const [isValid, setIsValid] = useState<boolean>(false)
+export function SampleDataInput({ onFileLoaded, isLoading = false }: SampleDataInputProps) {
+  const [fileName, setFileName] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState<boolean>(false)
 
-  // Debounce the value to avoid excessive parsing during typing
-  const debouncedValue = useDebounce(value, 300)
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
 
-  useEffect(() => {
-    // Validate JSON when debounced value changes
-    if (!debouncedValue.trim()) {
-      setParseError(null)
-      setIsValid(false)
-      return
-    }
+    setUploadError(null)
+    setIsUploading(true)
 
     try {
-      const parsed = JSON.parse(debouncedValue)
+      // Create FormData and upload file
+      const formData = new FormData()
+      formData.append('file', file)
 
-      // Ensure parsed value is an object (not array or primitive)
-      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
-        setParseError('Sample data must be a JSON object')
-        setIsValid(false)
-        return
+      const response = await fetch('/api/parse-sample-data', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `HTTP ${response.status}`)
       }
 
-      setParseError(null)
-      setIsValid(true)
-      onParsed(parsed as Record<string, unknown>)
+      const result = await response.json()
+
+      if (result.success) {
+        setFileName(result.fileName)
+        onFileLoaded(result.values, result.fileName)
+      } else {
+        throw new Error(result.error || 'Failed to parse file')
+      }
     } catch (error) {
-      const err = error as SyntaxError
-      setParseError(`Invalid JSON: ${err.message}`)
-      setIsValid(false)
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to upload file'
+      setUploadError(errorMessage)
+      console.error('File upload error:', error)
+    } finally {
+      setIsUploading(false)
     }
-  }, [debouncedValue, onParsed])
+  }
 
-  // Extract first 5 field names from source schema for hint
-  const fieldHint = sourceFields
-    ? sourceFields
-        .slice(0, 5)
-        .map((f) => f.name)
-        .join(', ') + (sourceFields.length > 5 ? ', ...' : '')
-    : null
-
-  // Border color based on validation state
-  const borderColor = !value.trim()
-    ? 'border-gray-300'
-    : isValid
-    ? 'border-green-500'
-    : 'border-red-500'
+  const handleClear = () => {
+    setFileName(null)
+    setUploadError(null)
+    // Reset file input
+    const input = document.getElementById('sample-file-input') as HTMLInputElement
+    if (input) {
+      input.value = ''
+    }
+  }
 
   return (
     <div className="space-y-2">
-      <label htmlFor="sample-data-input" className="block text-sm font-medium text-gray-700">
-        Sample Data (JSON)
+      <label htmlFor="sample-file-input" className="block text-sm font-medium text-gray-700">
+        Sample Data File
       </label>
 
-      <textarea
-        id="sample-data-input"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={'{\n  "fieldName": "value",\n  "amount": 100\n}'}
-        className={`w-full px-3 py-2 text-sm font-mono border ${borderColor} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y`}
-        rows={8}
-        aria-label="Enter sample JSON data for testing"
-        aria-invalid={parseError !== null}
-        aria-describedby={parseError ? 'parse-error' : fieldHint ? 'field-hint' : undefined}
-      />
-
-      {parseError && (
-        <p id="parse-error" className="text-sm text-red-600" role="alert">
-          {parseError}
-        </p>
+      {/* File Upload Area */}
+      {!fileName ? (
+        <div className="relative">
+          <input
+            id="sample-file-input"
+            type="file"
+            accept=".json,.xml"
+            onChange={handleFileSelect}
+            disabled={isLoading || isUploading}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+            aria-label="Upload sample data file"
+          />
+          <div
+            className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+              isUploading
+                ? 'border-blue-400 bg-blue-50'
+                : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+            }`}
+          >
+            {isUploading ? (
+              <div className="text-sm text-gray-600">
+                <div className="animate-pulse">Parsing file...</div>
+              </div>
+            ) : (
+              <>
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <p className="mt-2 text-sm text-gray-600">
+                  Click to upload or drag and drop
+                </p>
+                <p className="text-xs text-gray-500 mt-1">JSON or XML files (max 5MB)</p>
+              </>
+            )}
+          </div>
+        </div>
+      ) : (
+        /* File Loaded Success State */
+        <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-md">
+          <div className="flex items-center gap-2">
+            <span className="text-green-600" aria-label="Success">
+              ✓
+            </span>
+            <span className="text-sm font-medium text-gray-800">{fileName}</span>
+          </div>
+          <button
+            onClick={handleClear}
+            className="text-sm text-gray-600 hover:text-gray-800 underline"
+            aria-label="Clear file and upload another"
+          >
+            Clear
+          </button>
+        </div>
       )}
 
-      {!parseError && fieldHint && (
-        <p id="field-hint" className="text-xs text-gray-500">
-          Expected fields: {fieldHint}
-        </p>
+      {/* Error Message */}
+      {uploadError && (
+        <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-600">{uploadError}</p>
+        </div>
       )}
     </div>
   )

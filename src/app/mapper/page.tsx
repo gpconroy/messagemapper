@@ -30,7 +30,7 @@ function MapperContent() {
   const { validationResult, isValidating, fieldErrors } = useMappingValidation()
 
   // Get connections and schemas for preview panel
-  const { connections, sourceSchema } = useMappingStore()
+  const { connections, sourceSchema, targetSchema } = useMappingStore()
 
   // Panel visibility state
   const [isPanelOpen, setIsPanelOpen] = useState(true)
@@ -123,6 +123,7 @@ function MapperContent() {
                 <PreviewPanel
                   connections={connections}
                   sourceFields={sourceSchema?.fields}
+                  targetSchema={targetSchema}
                 />
               </div>
             </div>
