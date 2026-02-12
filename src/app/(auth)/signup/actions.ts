@@ -73,6 +73,8 @@ export async function signup(
       return { error: error.issues[0].message }
     }
     console.error("Signup error:", error)
-    return { error: "An error occurred during signup" }
+
+    // Re-throw NEXT_REDIRECT errors (signIn uses redirect internally)
+    throw error
   }
 }
