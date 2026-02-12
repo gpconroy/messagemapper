@@ -19,8 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 5: Transformation System** - Format conversion, concatenation, splitting, constants, conditional logic, lookup tables, custom JavaScript
 - [ ] **Phase 6: Validation & Testing** - Type mismatch detection, required field validation, mapping preview with sample data
 - [ ] **Phase 7: Schema Library Management** - Pre-loaded common schemas and custom schema upload with validation
-- [ ] **Phase 8: Intelligence & Quality** - Auto-mapping suggestions and unmapped field gap analysis
-- [ ] **Phase 9: Platform Features** - Full authentication, role-based access control, workspace management
+- [ ] **Phase 8: Platform Features** - Full authentication, role-based access control, workspace management
 
 ## Phase Details
 
@@ -135,20 +134,7 @@ Plans:
 Plans:
 - [ ] 07-01: TBD during phase planning
 
-### Phase 8: Intelligence & Quality
-**Goal**: Reduce manual mapping work by 10-70% with intelligent auto-suggestions and proactive gap analysis
-**Depends on**: Phase 6
-**Requirements**: MAP-09
-**Success Criteria** (what must be TRUE):
-  1. User sees auto-suggested field matches based on name and type similarity when starting a new mapping
-  2. User can accept or reject auto-mapping suggestions individually or in bulk
-  3. User sees visual indicators highlighting unmapped fields across the entire mapping
-**Plans**: TBD
-
-Plans:
-- [ ] 08-01: TBD during phase planning
-
-### Phase 9: Platform Features
+### Phase 8: Platform Features
 **Goal**: Enable multi-tenant SaaS operation with authentication, role-based access control, and workspace management
 **Depends on**: Phase 1
 **Requirements**: PLAT-01, PLAT-02, PLAT-03, PLAT-04, PLAT-05, PLAT-06, PLAT-07, PLAT-08
@@ -164,4 +150,4 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 09-01: TBD during phase planning
+- [ ] 08-01: TBD during phase planning

@@ -9,7 +9,7 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 
 ## Current Position
 
-Phase: 4 of 9 (Mapping Operations UX)
+Phase: 4 of 8 (Mapping Operations UX)
 Plan: 2 of 3 in current phase (04-01, 04-02 complete)
 Status: In Progress
 Last activity: 2026-02-12 — Completed plan 04-02 (Undo/redo with temporal middleware)
