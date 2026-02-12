@@ -7,7 +7,18 @@ import { MappingCanvas } from './components/MappingCanvas'
 import { useMappingState } from './hooks/useMappingState'
 
 function MapperContent() {
-  const { setSourceSchema, setTargetSchema } = useMappingState()
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    onEdgesDelete,
+    setSourceSchema,
+    setTargetSchema,
+    mappedSourcePaths,
+    mappedTargetPaths,
+  } = useMappingState()
 
   return (
     <div className="flex flex-col h-screen">
@@ -36,7 +47,16 @@ function MapperContent() {
 
       {/* Mapping Canvas */}
       <div className="flex-1 bg-gray-100">
-        <MappingCanvas />
+        <MappingCanvas
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onEdgesDelete={onEdgesDelete}
+          mappedSourcePaths={mappedSourcePaths}
+          mappedTargetPaths={mappedTargetPaths}
+        />
       </div>
     </div>
   )

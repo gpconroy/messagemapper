@@ -1,9 +1,9 @@
 'use client'
 
-import { ReactFlow, Background, Controls } from '@xyflow/react'
+import { ReactFlow, Background, Controls, type Node, type Edge, type OnNodesChange, type OnEdgesChange, type OnConnect, type OnEdgesDelete } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { useCallback, createContext } from 'react'
-import { useMappingState } from '../hooks/useMappingState'
+import type { MappingNodeData } from '@/types/mapping-types'
 import { FieldTreeNode } from './FieldTreeNode'
 import { isValidMappingConnection } from '../lib/validation'
 
@@ -19,18 +19,27 @@ export const MappingStatusContext = createContext<{
   mappedTargetPaths: new Set(),
 })
 
-export function MappingCanvas() {
-  const {
-    nodes,
-    edges,
-    onNodesChange,
-    onEdgesChange,
-    onConnect,
-    onEdgesDelete,
-    mappedSourcePaths,
-    mappedTargetPaths,
-  } = useMappingState()
+interface MappingCanvasProps {
+  nodes: Node<MappingNodeData>[]
+  edges: Edge[]
+  onNodesChange: OnNodesChange<Node<MappingNodeData>>
+  onEdgesChange: OnEdgesChange
+  onConnect: OnConnect
+  onEdgesDelete: OnEdgesDelete
+  mappedSourcePaths: Set<string>
+  mappedTargetPaths: Set<string>
+}
 
+export function MappingCanvas({
+  nodes,
+  edges,
+  onNodesChange,
+  onEdgesChange,
+  onConnect,
+  onEdgesDelete,
+  mappedSourcePaths,
+  mappedTargetPaths,
+}: MappingCanvasProps) {
   // Wrap validation function with current nodes and edges
   const isValidConnection = useCallback(
     (connection: any) => {
