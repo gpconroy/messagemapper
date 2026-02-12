@@ -21,7 +21,6 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 7: Schema Library Management** - Pre-loaded common schemas and custom schema upload with validation
 - [ ] **Phase 8: Intelligence & Quality** - Auto-mapping suggestions and unmapped field gap analysis
 - [ ] **Phase 9: Platform Features** - Full authentication, role-based access control, workspace management
-- [ ] **Phase 10: Advanced Format Support** - CSV and SQL DDL format parsers extending the registry
 
 ## Phase Details
 
@@ -137,7 +136,7 @@ Plans:
 - [ ] 07-01: TBD during phase planning
 
 ### Phase 8: Intelligence & Quality
-**Goal**: Reduce manual mapping work by 50-70% with intelligent auto-suggestions and proactive gap analysis
+**Goal**: Reduce manual mapping work by 10-70% with intelligent auto-suggestions and proactive gap analysis
 **Depends on**: Phase 6
 **Requirements**: MAP-09
 **Success Criteria** (what must be TRUE):
@@ -166,34 +165,3 @@ Plans:
 
 Plans:
 - [ ] 09-01: TBD during phase planning
-
-### Phase 10: Advanced Format Support
-**Goal**: Extend format parser registry to support CSV and SQL DDL formats for broader system interoperability
-**Depends on**: Phase 7
-**Requirements**: PARS-04, PARS-05
-**Success Criteria** (what must be TRUE):
-  1. User can upload a CSV file and see columns parsed as fields in the normalized field tree structure
-  2. User can upload a SQL DDL file and see table and column structure extracted as fields
-  3. CSV and SQL formats work with all existing mapping, transformation, and validation features without modification
-**Plans**: TBD
-
-Plans:
-- [ ] 10-01: TBD during phase planning
-
-## Progress
-
-**Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
-
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation & Infrastructure | 3/3 | ✓ Complete | 2026-02-11 |
-| 2. Format Parser Registry | 3/3 | ✓ Complete | 2026-02-11 |
-| 3. Visual Mapping Interface | 0/4 | In Progress | - |
-| 4. Mapping Operations & UX | 0/TBD | Not started | - |
-| 5. Transformation System | 0/TBD | Not started | - |
-| 6. Validation & Testing | 0/TBD | Not started | - |
-| 7. Schema Library Management | 0/TBD | Not started | - |
-| 8. Intelligence & Quality | 0/TBD | Not started | - |
-| 9. Platform Features | 0/TBD | Not started | - |
-| 10. Advanced Format Support | 0/TBD | Not started | - |
