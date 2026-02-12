@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 5 of 7 (Transformation System)
-Plan: 1 of 6 in current phase (05-01 complete)
+Plan: 4 of 6 in current phase (05-04 complete)
 Status: In Progress
-Last activity: 2026-02-12 — Completed plan 05-01 (Built-in Transformation Functions)
+Last activity: 2026-02-12 — Completed plan 05-04 (Transformation Pipeline & Preview API)
 
-Progress: [█████████░] 73%
+Progress: [█████████░] 76%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: ~407s (6.8 minutes)
-- Total execution time: ~2.9 hours
+- Total plans completed: 16
+- Average duration: ~494s (8.2 minutes)
+- Total execution time: ~3.6 hours
 
 **By Phase:**
 
@@ -31,19 +31,20 @@ Progress: [█████████░] 73%
 | 02 | 3/3 | ✅ Complete |
 | 03 | 3/4 | 🔄 In Progress |
 | 04 | 3/3 | ✅ Complete |
-| 05 | 1/6 | 🔄 In Progress |
+| 05 | 4/6 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
 |------------|----------|-------|-------|
-| 02-03 | 622s | 2 | 5 |
-| 03-01 | 1399s | 2 | 7 |
 | 03-02 | 252s | 2 | 4 |
 | 03-04 | 180s | 1 | 2 |
 | 04-01 | 261s | 2 | 4 |
 | 04-02 | 411s | 2 | 5 |
 | 04-03 | 2 min | 1 | 1 |
 | 05-01 | 1493s (25 min) | 1 (TDD) | 7 |
+| 05-02 | 492s (8 min) | 2 | 4 |
+| 05-03 | 353s (6 min) | 1 (TDD) | 4 |
+| 05-04 | 609s (10 min) | 2 | 8 |
 
 ## Accumulated Context
 
@@ -108,6 +109,10 @@ Recent decisions affecting current work:
 - Plan 05-03: Default timeout 5000ms and memory limit 128MB for custom JS transformations
 - Plan 05-03: ExternalCopy.copyInto() for input isolation preventing sandbox from modifying caller data
 - Plan 05-03: Track disposed state to prevent double-dispose errors on memory limit failures
+- Plan 05-04: Fixed Zod v4 compatibility: z.record(z.string(), z.unknown()) instead of z.record(z.unknown())
+- Plan 05-04: Pipeline collects all errors instead of stopping at first failure
+- Plan 05-04: Dry-run mode returns original data unchanged while recording transformation outputs
+- Plan 05-04: Pipeline sorts rules by order field before execution for deterministic behavior
 
 ### Pending Todos
 
@@ -133,6 +138,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 05-01-PLAN.md (Built-in Transformation Functions)
+Stopped at: Completed 05-04-PLAN.md (Transformation Pipeline & Preview API)
 Resume file: None
-Next: Continue Phase 5 with plan 05-02 (Transformation API)
+Next: Continue Phase 5 with plan 05-05 (Transformation UI)
