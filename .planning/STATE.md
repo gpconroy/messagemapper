@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** Clients can visually map fields between any two message formats and save those mappings for reuse — making system integration visible, configurable, and repeatable.
-**Current focus:** Phase 4: Mapping Operations UX
+**Current focus:** Phase 5: Transformation System
 
 ## Current Position
 
-Phase: 4 of 7 (Mapping Operations UX)
-Plan: 3 of 3 in current phase (04-01, 04-02, 04-03 complete)
-Status: Complete
-Last activity: 2026-02-12 — Completed plan 04-03 (Human verification testing)
+Phase: 5 of 7 (Transformation System)
+Plan: 3 of 6 in current phase (05-01, 05-02, 05-03 complete)
+Status: In Progress
+Last activity: 2026-02-12 — Completed plan 05-03 (Custom JavaScript Sandbox with isolated-vm)
 
-Progress: [████████░░] 71%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: ~410s (6.8 minutes)
-- Total execution time: ~2.4 hours
+- Total plans completed: 13
+- Average duration: ~398s (6.6 minutes)
+- Total execution time: ~2.5 hours
 
 **By Phase:**
 
@@ -31,13 +31,11 @@ Progress: [████████░░] 71%
 | 02 | 3/3 | ✅ Complete |
 | 03 | 3/4 | 🔄 In Progress |
 | 04 | 3/3 | ✅ Complete |
+| 05 | 3/6 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
 |------------|----------|-------|-------|
-| 01-01 | 77s | 2 | 9 |
-| 01-02 | 876s | 2 | 5 |
-| 01-03 | manual | 2 | 4 |
 | 02-01 | 469s | 2 | 9 |
 | 02-02 | 1217s | 2 | 5 |
 | 02-03 | 622s | 2 | 5 |
@@ -46,7 +44,8 @@ Progress: [████████░░] 71%
 | 03-04 | 180s | 1 | 2 |
 | 04-01 | 261s | 2 | 4 |
 | 04-02 | 411s | 2 | 5 |
-| Phase 04 P03 | 2 min | 1 tasks | 1 files |
+| 04-03 | 2 min | 1 | 1 |
+| 05-03 | 353s | 1 (TDD) | 4 |
 
 ## Accumulated Context
 
@@ -97,6 +96,10 @@ Recent decisions affecting current work:
 - Plan 04-02: useMappingState acts as bridge between Zustand store and React Flow interface
 - Plan 04-02: Support both Ctrl+Shift+Z and Ctrl+Y for redo (cross-platform conventions)
 - Plan 04-03: All Phase 4 UX enhancements verified working by human tester (search/filter, visual indicators, undo/redo, zoom/pan)
+- Plan 05-03: Use isolated-vm instead of vm2 for JavaScript sandbox (vm2 has multiple critical CVEs)
+- Plan 05-03: Default timeout 5000ms and memory limit 128MB for custom JS transformations
+- Plan 05-03: ExternalCopy.copyInto() for input isolation preventing sandbox from modifying caller data
+- Plan 05-03: Track disposed state to prevent double-dispose errors on memory limit failures
 
 ### Pending Todos
 
@@ -108,7 +111,7 @@ Recent decisions affecting current work:
 - ~~XSD schema parsing has limited JavaScript ecosystem support — needs spike to evaluate libxmljs2 vs custom parser vs server-side approach~~ **RESOLVED:** Implemented XSD parser using fast-xml-parser parse-as-XML approach (Plan 02-02)
 
 **Phase 5 (Transformation System):**
-- Custom JavaScript transformation functions require sandbox isolation (VM2, isolated-vm, or WebAssembly) — security critical
+- ~~Custom JavaScript transformation functions require sandbox isolation (VM2, isolated-vm, or WebAssembly) — security critical~~ **RESOLVED:** Implemented secure sandbox using isolated-vm with V8 Isolate, timeout, and memory limits (Plan 05-03)
 
 **Phase 8 (Intelligence & Quality):**
 - Auto-mapping algorithm selection needs research — multiple approaches possible (Levenshtein, soundex, semantic NLP, type scoring)
@@ -122,6 +125,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 04-03-PLAN.md (Human verification testing)
+Stopped at: Completed 05-03-PLAN.md (Custom JavaScript Sandbox with isolated-vm)
 Resume file: None
-Next: Phase 4 complete, ready to plan Phase 5
+Next: Continue Phase 5 with plan 05-04 (Transformation pipeline orchestrator)
