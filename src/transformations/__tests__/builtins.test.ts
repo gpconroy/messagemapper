@@ -5,6 +5,7 @@
  */
 
 import { describe, it, expect } from '@jest/globals';
+import { directMap } from '../builtins/direct';
 import { formatDate } from '../builtins/format';
 import { formatNumber } from '../builtins/format';
 import { splitString } from '../builtins/string';
@@ -12,6 +13,34 @@ import { concatenateStrings } from '../builtins/string';
 import { applyConditional } from '../builtins/conditional';
 import { setConstant } from '../builtins/constant';
 import { executeTransform } from '../registry';
+
+describe('directMap', () => {
+  it('passes through string values unchanged', () => {
+    const result = directMap('hello', {});
+    expect(result).toBe('hello');
+  });
+
+  it('passes through number values unchanged', () => {
+    const result = directMap(42, {});
+    expect(result).toBe(42);
+  });
+
+  it('passes through null unchanged', () => {
+    const result = directMap(null, {});
+    expect(result).toBe(null);
+  });
+
+  it('passes through objects unchanged', () => {
+    const obj = { a: 1 };
+    const result = directMap(obj, {});
+    expect(result).toBe(obj);
+  });
+
+  it('is callable via executeTransform', async () => {
+    const result = await executeTransform('direct', 'test', {});
+    expect(result).toBe('test');
+  });
+});
 
 describe('formatDate', () => {
   it('formats ISO date to MM/dd/yyyy', () => {

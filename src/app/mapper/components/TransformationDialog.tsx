@@ -17,6 +17,7 @@ interface TransformationTypeOption {
 }
 
 const TRANSFORMATION_TYPES: TransformationTypeOption[] = [
+  { value: 'direct', label: 'Direct Mapping' },
   { value: 'format_date', label: 'Date Format' },
   { value: 'format_number', label: 'Number Format' },
   { value: 'split', label: 'Split' },
@@ -37,7 +38,7 @@ export function TransformationDialog() {
   const setConnectionTransform = useMappingStore((state) => state.setConnectionTransform)
   const removeConnectionTransform = useMappingStore((state) => state.removeConnectionTransform)
 
-  const [selectedType, setSelectedType] = useState<TransformationType>('format_date')
+  const [selectedType, setSelectedType] = useState<TransformationType>('direct')
   const [config, setConfig] = useState<Record<string, unknown>>({})
 
   const connection = connections.find((c) => c.id === selectedConnectionId)
@@ -49,7 +50,7 @@ export function TransformationDialog() {
       setConfig(connection.transformation.config)
     } else {
       // Reset to defaults
-      setSelectedType('format_date')
+      setSelectedType('direct')
       setConfig({})
     }
   }, [connection])
@@ -104,6 +105,8 @@ export function TransformationDialog() {
 
   const renderConfigForm = () => {
     switch (selectedType) {
+      case 'direct':
+        return <div className="text-sm text-gray-500">No configuration needed. The source field value will be copied directly to the target field.</div>
       case 'format_date':
         return <DateFormatForm config={config} onChange={setConfig} />
       case 'format_number':

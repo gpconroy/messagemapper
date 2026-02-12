@@ -208,6 +208,26 @@ describe('Pipeline Execution', () => {
     expect(result.success).toBe(true);
     expect(result.result!.joined).toBe('A-B-C');
   });
+
+  it('should execute direct mapping without transformation', async () => {
+    const data = { name: 'Alice' };
+
+    const rules: TransformationRule[] = [
+      {
+        id: 'r1',
+        type: 'direct',
+        sourceFields: ['name'],
+        targetField: 'displayName',
+        config: {},
+        order: 0,
+      },
+    ];
+
+    const result = await applyTransformations(data, rules);
+
+    expect(result.success).toBe(true);
+    expect(result.result!.displayName).toBe('Alice');
+  });
 });
 
 describe('Error Collection', () => {
@@ -425,15 +445,23 @@ describe('Validator Direct Tests', () => {
     expect(result.errors).toBeUndefined();
   });
 
-  it('should validate all 8 transformation types', () => {
+  it('should validate all 9 transformation types', () => {
     const rules = [
+      {
+        id: 'r0',
+        type: 'direct',
+        sourceFields: ['field'],
+        targetField: 'mapped',
+        config: {},
+        order: 0,
+      },
       {
         id: 'r1',
         type: 'format_date',
         sourceFields: ['date'],
         targetField: 'formatted',
         config: { to: 'yyyy-MM-dd' },
-        order: 0,
+        order: 1,
       },
       {
         id: 'r2',
@@ -441,7 +469,7 @@ describe('Validator Direct Tests', () => {
         sourceFields: ['num'],
         targetField: 'formatted',
         config: { type: 'number' },
-        order: 1,
+        order: 2,
       },
       {
         id: 'r3',
@@ -449,7 +477,7 @@ describe('Validator Direct Tests', () => {
         sourceFields: ['text'],
         targetField: 'parts',
         config: { delimiter: ',' },
-        order: 2,
+        order: 3,
       },
       {
         id: 'r4',
@@ -457,7 +485,7 @@ describe('Validator Direct Tests', () => {
         sourceFields: ['a', 'b'],
         targetField: 'joined',
         config: { separator: ' ' },
-        order: 3,
+        order: 4,
       },
       {
         id: 'r5',
@@ -465,7 +493,7 @@ describe('Validator Direct Tests', () => {
         sourceFields: ['val'],
         targetField: 'result',
         config: { operator: 'equals', value: 1, thenValue: 'yes', elseValue: 'no' },
-        order: 4,
+        order: 5,
       },
       {
         id: 'r6',
@@ -473,7 +501,7 @@ describe('Validator Direct Tests', () => {
         sourceFields: ['_'],
         targetField: 'const',
         config: { value: 'test' },
-        order: 5,
+        order: 6,
       },
       {
         id: 'r7',
@@ -481,7 +509,7 @@ describe('Validator Direct Tests', () => {
         sourceFields: ['code'],
         targetField: 'name',
         config: { tableName: 'table1' },
-        order: 6,
+        order: 7,
       },
       {
         id: 'r8',
@@ -489,13 +517,13 @@ describe('Validator Direct Tests', () => {
         sourceFields: ['input'],
         targetField: 'output',
         config: { code: 'return input * 2' },
-        order: 7,
+        order: 8,
       },
     ];
 
     const result = validateTransformationRules(rules);
 
     expect(result.valid).toBe(true);
-    expect(result.rules).toHaveLength(8);
+    expect(result.rules).toHaveLength(9);
   });
 });

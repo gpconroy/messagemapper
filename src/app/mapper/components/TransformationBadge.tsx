@@ -13,6 +13,8 @@ interface TransformationBadgeProps {
 export function TransformationBadge({ type, onClick }: TransformationBadgeProps) {
   const getAbbreviation = (transformType: TransformationType): string => {
     switch (transformType) {
+      case 'direct':
+        return '->'
       case 'format_date':
         return 'Dt'
       case 'format_number':
