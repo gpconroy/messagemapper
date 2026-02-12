@@ -5,19 +5,11 @@
 import type { SplitConfig, ConcatenateConfig } from '../types';
 
 /**
- * Safe regex patterns whitelist to prevent ReDoS attacks
- */
-const SAFE_REGEX_PATTERNS = [
-  /^[\[\](),;:\s]+$/,  // Character classes with safe chars
-  /^\[.*?\]$/,          // Simple character class
-];
-
-/**
- * Validate regex pattern against whitelist
+ * Validate regex pattern against whitelist to prevent ReDoS attacks
+ * Currently allows only simple character classes like [,;]
  */
 function isSafeRegex(pattern: string): boolean {
-  // For now, allow simple character classes like [,;]
-  // More complex patterns should be validated against whitelist
+  // Only allow simple character class patterns like [abc] or [,;]
   return /^\[[^\]]+\]$/.test(pattern);
 }
 
