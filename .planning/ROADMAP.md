@@ -119,10 +119,13 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User sees validation errors for type mismatches and missing required field mappings
   2. User can test a mapping with sample data and see the transformed output
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 06-01: TBD during phase planning
+- [ ] 06-01-PLAN.md — Mapping validation engine with type compatibility matrix, required field checking, and transformation output type inference (TDD)
+- [ ] 06-02-PLAN.md — Sample data preview panel with JSON input, transformation execution, and results display
+- [ ] 06-03-PLAN.md — Validation hook, error panel, field-level indicators, and integration into mapper page
+- [ ] 06-04-PLAN.md — Human verification of validation errors, type mismatch detection, and sample data preview
 
 ### Phase 7: Platform Features
 **Goal**: Enable multi-tenant SaaS operation with authentication, role-based access control, and workspace management
