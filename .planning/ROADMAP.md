@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 3: Visual Mapping Interface** - Side-by-side panel UI with drag-and-drop field connections using React Flow
 - [x] **Phase 4: Mapping Operations & UX** - Search, filter, expand/collapse, undo/redo, zoom/pan for large schemas
 - [ ] **Phase 5: Transformation System** - Format conversion, concatenation, splitting, constants, conditional logic, lookup tables, custom JavaScript
-- [ ] **Phase 6: Validation & Testing** - Type mismatch detection, required field validation, mapping preview with sample data
+- [x] **Phase 6: Validation & Testing** - Type mismatch detection, required field validation, mapping preview with sample data
 - [ ] **Phase 7: Platform Features** - Full authentication, role-based access control, workspace management
 
 ## Phase Details
@@ -122,10 +122,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Mapping validation engine with type compatibility matrix, required field checking, and transformation output type inference (TDD)
-- [ ] 06-02-PLAN.md — Sample data preview panel with JSON input, transformation execution, and results display
-- [ ] 06-03-PLAN.md — Validation hook, error panel, field-level indicators, and integration into mapper page
-- [ ] 06-04-PLAN.md — Human verification of validation errors, type mismatch detection, and sample data preview
+- [x] 06-01-PLAN.md — Mapping validation engine with type compatibility matrix, required field checking, and transformation output type inference (TDD)
+- [x] 06-02-PLAN.md — Sample data preview panel with JSON input, transformation execution, and results display
+- [x] 06-03-PLAN.md — Validation hook, error panel, field-level indicators, and integration into mapper page
+- [x] 06-04-PLAN.md — Human verification of validation errors, type mismatch detection, and sample data preview
 
 ### Phase 7: Platform Features
 **Goal**: Enable multi-tenant SaaS operation with authentication, role-based access control, and workspace management
