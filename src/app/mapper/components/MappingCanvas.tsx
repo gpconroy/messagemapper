@@ -5,12 +5,14 @@ import '@xyflow/react/dist/style.css'
 import { useCallback, createContext } from 'react'
 import type { MappingNodeData } from '@/types/mapping-types'
 import { FieldTreeNode } from './FieldTreeNode'
+import { TransformationEdge } from './TransformationEdge'
 import { isValidMappingConnection } from '../lib/validation'
 import { TransformationDialog } from './TransformationDialog'
 import { useMappingStore } from '../store/useMappingStore'
 
-// Define nodeTypes at module level to prevent React Flow warning about changing nodeTypes
+// Define nodeTypes and edgeTypes at module level to prevent React Flow warning about changing types
 const nodeTypes = { fieldTree: FieldTreeNode }
+const edgeTypes = { transformation: TransformationEdge }
 
 // Context for providing mapped paths to field tree nodes
 export const MappingStatusContext = createContext<{
@@ -72,6 +74,7 @@ export function MappingCanvas({
           onEdgesDelete={onEdgesDelete}
           onEdgeClick={handleEdgeClick}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           isValidConnection={isValidConnection}
           connectionLineStyle={{ stroke: '#2563eb', strokeWidth: 2 }}
           defaultEdgeOptions={{
