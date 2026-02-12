@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 6 of 7 (Validation & Testing)
-Plan: 2 of 4 in current phase (06-01 complete)
+Plan: 3 of 4 in current phase (06-01, 06-03 complete)
 Status: In Progress
-Last activity: 2026-02-12 — Completed plan 06-01 (Mapping Validation Engine)
+Last activity: 2026-02-12 — Completed plan 06-03 (Validation Feedback UI)
 
-Progress: [█████████░] 83%
+Progress: [█████████░] 84%
 
 ## Performance Metrics
 
@@ -37,8 +37,6 @@ Progress: [█████████░] 83%
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
 |------------|----------|-------|-------|
-| 03-02 | 252s | 2 | 4 |
-| 03-04 | 180s | 1 | 2 |
 | 04-01 | 261s | 2 | 4 |
 | 04-02 | 411s | 2 | 5 |
 | 04-03 | 2 min | 1 | 1 |
@@ -48,6 +46,7 @@ Progress: [█████████░] 83%
 | 05-04 | 609s (10 min) | 2 | 8 |
 | 05-05 | 276s (4.6 min) | 2 | 9 |
 | 06-01 | 344s (5.7 min) | 1 (TDD) | 7 |
+| 06-03 | 348s (5.8 min) | 2 | 6 |
 
 ## Accumulated Context
 
@@ -124,6 +123,10 @@ Recent decisions affecting current work:
 - Plan 06-01: ValidationError type shared between required-fields and validate-mapping modules for consistency
 - Plan 06-01: Transformation output type inference traces through chains sequentially for accurate final type determination
 - Plan 06-01: Leaf-field-only validation - only leaf fields (no children) are checked for required field coverage
+- Plan 06-03: ValidationPanel expands by default when errors exist, collapses when valid for unobtrusive UX
+- Plan 06-03: Field error indicators use simple dot with title tooltip instead of complex hover UI for compact display
+- Plan 06-03: Bottom panel layout (validation + preview) with toggle keeps canvas area maximized
+- Plan 06-03: 500ms debounce prevents excessive validation runs during rapid connection changes
 
 ### Pending Todos
 
@@ -151,6 +154,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed plan 06-01 (Mapping Validation Engine)
+Stopped at: Completed plan 06-03 (Validation Feedback UI)
 Resume file: None
-Next: Continue Phase 6 with plan 06-02 (Validation Feedback UI)
+Next: Continue Phase 6 with plan 06-04 (Human Verification)
