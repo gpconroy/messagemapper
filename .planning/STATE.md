@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 Phase: 5 of 7 (Transformation System)
 Plan: 3 of 6 in current phase (05-01, 05-02, 05-03 complete)
 Status: In Progress
-Last activity: 2026-02-12 — Completed plan 05-03 (Custom JavaScript Sandbox with isolated-vm)
+Last activity: 2026-02-12 — Completed plan 05-02 (Database models and API routes for transformations and lookup tables)
 
 Progress: [████████░░] 75%
 
@@ -20,7 +20,7 @@ Progress: [████████░░] 75%
 
 **Velocity:**
 - Total plans completed: 13
-- Average duration: ~398s (6.6 minutes)
+- Average duration: ~380s (6.3 minutes)
 - Total execution time: ~2.5 hours
 
 **By Phase:**
@@ -36,8 +36,6 @@ Progress: [████████░░] 75%
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
 |------------|----------|-------|-------|
-| 02-01 | 469s | 2 | 9 |
-| 02-02 | 1217s | 2 | 5 |
 | 02-03 | 622s | 2 | 5 |
 | 03-01 | 1399s | 2 | 7 |
 | 03-02 | 252s | 2 | 4 |
@@ -45,6 +43,8 @@ Progress: [████████░░] 75%
 | 04-01 | 261s | 2 | 4 |
 | 04-02 | 411s | 2 | 5 |
 | 04-03 | 2 min | 1 | 1 |
+| 05-01 | 495s | 2 | 9 |
+| 05-02 | 8 min | 2 | 4 |
 | 05-03 | 353s | 1 (TDD) | 4 |
 
 ## Accumulated Context
@@ -96,6 +96,11 @@ Recent decisions affecting current work:
 - Plan 04-02: useMappingState acts as bridge between Zustand store and React Flow interface
 - Plan 04-02: Support both Ctrl+Shift+Z and Ctrl+Y for redo (cross-platform conventions)
 - Plan 04-03: All Phase 4 UX enhancements verified working by human tester (search/filter, visual indicators, undo/redo, zoom/pan)
+- Plan 05-02: Used Json type for TransformationRule.config to support type-specific configuration flexibility
+- Plan 05-02: Added order field to TransformationRule for deterministic pipeline execution
+- Plan 05-02: Enforced unique constraint on (tenantId, name) for LookupTable to prevent duplicate names per tenant
+- Plan 05-02: Used hardcoded DEV_TENANT_ID fallback in API routes until Phase 7 authentication
+- Plan 05-02: Fixed Next.js 15+ async params pattern for dynamic routes (params is Promise)
 - Plan 05-03: Use isolated-vm instead of vm2 for JavaScript sandbox (vm2 has multiple critical CVEs)
 - Plan 05-03: Default timeout 5000ms and memory limit 128MB for custom JS transformations
 - Plan 05-03: ExternalCopy.copyInto() for input isolation preventing sandbox from modifying caller data
@@ -125,6 +130,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 05-03-PLAN.md (Custom JavaScript Sandbox with isolated-vm)
+Stopped at: Completed 05-02-PLAN.md (Database models and API routes for transformations and lookup tables)
 Resume file: None
 Next: Continue Phase 5 with plan 05-04 (Transformation pipeline orchestrator)
