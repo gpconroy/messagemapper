@@ -1,4 +1,5 @@
 import { FieldNode } from '@/types/parser-types'
+import { TransformationType } from '@/transformations/types'
 
 /** Which side of the mapping canvas */
 export type MappingSide = 'source' | 'target'
@@ -11,10 +12,18 @@ export interface MappingNodeData extends Record<string, unknown> {
   expanded: Record<string, boolean>
 }
 
+/** Transformation configuration for a mapping connection */
+export interface ConnectionTransformation {
+  type: TransformationType
+  config: Record<string, unknown>
+  label?: string
+}
+
 /** Metadata stored on edges connecting two fields */
 export interface MappingEdgeData extends Record<string, unknown> {
   sourceFieldPath: string
   targetFieldPath: string
+  transformation?: ConnectionTransformation
 }
 
 /** Field mapping status for visual indication */
