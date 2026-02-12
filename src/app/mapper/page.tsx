@@ -23,15 +23,15 @@ function MapperContent() {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <header className="bg-green-600 border-b border-green-700 px-6 py-4">
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            className="text-sm text-white/80 hover:text-white hover:underline"
           >
             ← Back
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">MessageMapper</h1>
+          <h1 className="text-2xl font-bold text-white">MessageMapper</h1>
         </div>
       </header>
 
