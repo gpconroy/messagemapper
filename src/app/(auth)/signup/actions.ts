@@ -82,6 +82,10 @@ export async function signup(
         },
       })
 
+      // Set RLS context for user creation
+      // Required because users table has INSERT policy checking app.current_tenant_id
+      await tx.$executeRaw`SELECT set_config('app.current_tenant_id', ${tenant.id}, TRUE)`
+
       await tx.user.create({
         data: {
           email: data.email,
