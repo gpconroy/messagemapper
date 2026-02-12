@@ -70,6 +70,7 @@ export function MappingCanvas({
     <div className="w-full h-full">
       <MappingStatusContext.Provider value={{ mappedSourcePaths, mappedTargetPaths, validationErrors }}>
         <ReactFlow
+          className="mapper-flow"
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -82,11 +83,12 @@ export function MappingCanvas({
           isValidConnection={isValidConnection}
           connectionMode={ConnectionMode.Loose}
           connectionLineType={ConnectionLineType.SmoothStep}
-          connectionLineStyle={{ stroke: '#2563eb', strokeWidth: 2 }}
+          connectionLineStyle={{ stroke: '#1d4ed8', strokeWidth: 3 }}
           defaultEdgeOptions={{
-            type: 'smoothstep',
-            animated: true,
-            style: { stroke: '#2563eb', strokeWidth: 2 },
+            type: 'transformation',
+            animated: false,
+            interactionWidth: 32,
+            style: { stroke: '#1d4ed8', strokeWidth: 3 },
           }}
           deleteKeyCode="Backspace"
           fitView

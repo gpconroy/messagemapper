@@ -24,3 +24,16 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Keep mapper edges visible/clickable over complex field-tree node layouts. */
+.mapper-flow .react-flow__edges {
+  z-index: 30;
+}
+
+.mapper-flow .react-flow__nodes {
+  z-index: 20;
+}
+
+.mapper-flow .react-flow__edge-path {
+  stroke-opacity: 1 !important;
+}

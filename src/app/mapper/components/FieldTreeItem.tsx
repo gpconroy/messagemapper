@@ -43,11 +43,12 @@ function FieldTreeItemComponent({
 }: FieldTreeItemProps) {
   const hasChildren = field.children.length > 0
   const expanded = isExpanded(field.path)
-  const showHandle = !hasChildren || !expanded
 
   // Get mapped paths from context to compute status for children
   const { mappedSourcePaths, mappedTargetPaths } = useContext(MappingStatusContext)
   const mappedPaths = side === 'source' ? mappedSourcePaths : mappedTargetPaths
+  const isDirectlyMapped = mappedPaths.has(field.path)
+  const showHandle = !hasChildren || !expanded || isDirectlyMapped
 
   // Status indicator colors
   const statusIndicator =

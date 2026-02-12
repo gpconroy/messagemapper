@@ -3,9 +3,10 @@
 import { useCallback, useMemo, useEffect } from 'react'
 import {
   useNodesState,
-  applyEdgeChanges,
   type Node,
   type Edge,
+  MarkerType,
+  useUpdateNodeInternals,
   type OnConnect,
   type OnEdgesDelete,
   type OnNodesChange,
@@ -53,6 +54,7 @@ export function getMappingStatus(
 export function useMappingState() {
   const store = useMappingStore()
   const { sourceSchema, targetSchema, connections } = store
+  const updateNodeInternals = useUpdateNodeInternals()
 
   // Build nodes from schemas
   const schemaNodes = useMemo(() => {
@@ -111,11 +113,19 @@ export function useMappingState() {
           target: 'target-node',
           sourceHandle: conn.sourceFieldPath,
           targetHandle: conn.targetFieldPath,
-          type: hasTransformation ? 'transformation' : 'smoothstep',
-          animated: true,
+          // Use one custom edge renderer for all connections to ensure consistent visibility/clickability.
+          type: 'transformation',
+          animated: false,
+          interactionWidth: 32,
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: hasTransformation ? '#7c3aed' : '#1d4ed8',
+            width: 18,
+            height: 18,
+          },
           style: hasTransformation
-            ? { stroke: '#7c3aed', strokeWidth: 2 } // Purple for transformed edges
-            : { stroke: '#2563eb', strokeWidth: 2 }, // Blue for plain edges
+            ? { stroke: '#7c3aed', strokeWidth: 3 } // Purple for transformed edges
+            : { stroke: '#1d4ed8', strokeWidth: 3 }, // Stronger blue for plain edges
           data: {
             sourceFieldPath: conn.sourceFieldPath,
             targetFieldPath: conn.targetFieldPath,
@@ -125,6 +135,14 @@ export function useMappingState() {
       }),
     [connections]
   )
+
+  // React Flow can miss handle geometry updates for deeply nested/scrolling handles.
+  // Force recalculation whenever connections change so persisted edges remain visible.
+  useEffect(() => {
+    if (!sourceSchema || !targetSchema) return
+    updateNodeInternals('source-node')
+    updateNodeInternals('target-node')
+  }, [connections, sourceSchema, targetSchema, updateNodeInternals])
 
   // Derive mapped paths from connections
   const mappedSourcePaths = useMemo(
@@ -139,6 +157,13 @@ export function useMappingState() {
   const onConnect: OnConnect = useCallback(
     (connection) => {
       if (!connection.sourceHandle || !connection.targetHandle) return
+
+      // Loose mode allows drawing in either direction; normalize to source -> target.
+      if (connection.source === 'target-node' && connection.target === 'source-node') {
+        store.addConnection(connection.targetHandle, connection.sourceHandle)
+        return
+      }
+
       store.addConnection(connection.sourceHandle, connection.targetHandle)
     },
     [store]

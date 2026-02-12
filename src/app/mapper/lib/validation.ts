@@ -1,6 +1,7 @@
 import type { Connection, Node, Edge } from '@xyflow/react'
-import type { FieldNode, FieldType } from '@/types/parser-types'
+import type { FieldNode } from '@/types/parser-types'
 import type { MappingNodeData } from '@/types/mapping-types'
+import { areTypesCompatible } from '@/validation/type-compatibility'
 
 /**
  * Recursively searches for a field by path in a field tree
@@ -18,32 +19,31 @@ function findFieldByPath(fields: FieldNode[], path: string): FieldNode | null {
   return null
 }
 
-/**
- * Checks if two field types are compatible for mapping
- *
- * Compatibility rules:
- * - Exact match is always valid
- * - integer can map to number (widening)
- * - any type can map to any (wildcard)
- * - any type can map from any (wildcard)
- * - number types (integer/number) are compatible with each other
- */
-function areTypesCompatible(sourceType: FieldType, targetType: FieldType): boolean {
-  // Exact match
-  if (sourceType === targetType) return true
+function normalizeConnectionHandles(connection: Connection): {
+  sourceHandle: string
+  targetHandle: string
+} | null {
+  if (!connection.sourceHandle || !connection.targetHandle) {
+    return null
+  }
 
-  // Any type wildcards
-  if (sourceType === 'any' || targetType === 'any') return true
+  // Standard direction: source-node -> target-node
+  if (connection.source === 'source-node' && connection.target === 'target-node') {
+    return {
+      sourceHandle: connection.sourceHandle,
+      targetHandle: connection.targetHandle,
+    }
+  }
 
-  // Integer to number is a safe widening conversion
-  if (sourceType === 'integer' && targetType === 'number') return true
+  // Loose mode can produce reverse direction when dragging from target to source.
+  if (connection.source === 'target-node' && connection.target === 'source-node') {
+    return {
+      sourceHandle: connection.targetHandle,
+      targetHandle: connection.sourceHandle,
+    }
+  }
 
-  // Number to integer is technically narrowing (loses decimals) but allow with transformation
-  // Users can add a rounding transformation if needed
-  if (sourceType === 'number' && targetType === 'integer') return true
-
-  // All other combinations require explicit transformation
-  return false
+  return null
 }
 
 /**
@@ -59,19 +59,16 @@ export function isValidMappingConnection(
     return false
   }
 
-  // Prevent source-to-source or target-to-target connections
-  // Only allow: source-node (source) -> target-node (target)
-  if (
-    !(connection.source === 'source-node' && connection.target === 'target-node')
-  ) {
+  const normalizedHandles = normalizeConnectionHandles(connection)
+  if (!normalizedHandles) {
     return false
   }
 
   // Prevent duplicate mappings - check if edge with same handles already exists
   const duplicateExists = edges.some(
     (edge) =>
-      edge.sourceHandle === connection.sourceHandle &&
-      edge.targetHandle === connection.targetHandle
+      edge.sourceHandle === normalizedHandles.sourceHandle &&
+      edge.targetHandle === normalizedHandles.targetHandle
   )
 
   if (duplicateExists) {
@@ -82,15 +79,15 @@ export function isValidMappingConnection(
   const sourceNode = nodes.find(n => n.id === 'source-node') as Node<MappingNodeData> | undefined
   const targetNode = nodes.find(n => n.id === 'target-node') as Node<MappingNodeData> | undefined
 
-  if (sourceNode && targetNode && connection.sourceHandle && connection.targetHandle) {
-    const sourceField = findFieldByPath(sourceNode.data.fields, connection.sourceHandle)
-    const targetField = findFieldByPath(targetNode.data.fields, connection.targetHandle)
+  if (sourceNode && targetNode) {
+    const sourceField = findFieldByPath(sourceNode.data.fields, normalizedHandles.sourceHandle)
+    const targetField = findFieldByPath(targetNode.data.fields, normalizedHandles.targetHandle)
 
     if (sourceField && targetField) {
       if (!areTypesCompatible(sourceField.type, targetField.type)) {
         console.warn(
           `Type mismatch: Cannot map ${sourceField.type} to ${targetField.type} without transformation`,
-          { sourceField: connection.sourceHandle, targetField: connection.targetHandle }
+          { sourceField: normalizedHandles.sourceHandle, targetField: normalizedHandles.targetHandle }
         )
         return false
       }

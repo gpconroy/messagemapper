@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect, useTransition } from 'react'
+import { useState, useEffect, useTransition, useRef } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import { SchemaUploadPanel } from '@/app/mapper/components/SchemaUploadPanel'
 import { MappingCanvas } from '@/app/mapper/components/MappingCanvas'
@@ -41,7 +41,8 @@ function MapperContent({
   const { validationResult, isValidating, fieldErrors } = useMappingValidation()
 
   // Get connections and schemas for preview panel
-  const { connections, sourceSchema, targetSchema } = useMappingStore()
+  const { connections, sourceSchema, targetSchema, fieldTreeExpanded } = useMappingStore()
+  const initializedRef = useRef(false)
 
   // Panel visibility state
   const [isPanelOpen, setIsPanelOpen] = useState(true)
@@ -57,41 +58,53 @@ function MapperContent({
 
   // Initialize the mapper with loaded data
   useEffect(() => {
-    if (mapping.mappingData) {
-      const data = mapping.mappingData as any
+    if (initializedRef.current) return
+    initializedRef.current = true
 
-      // Load source schema
-      if (data.sourceSchema) {
-        setSourceSchema(data.sourceSchema.fields, data.sourceSchema.label)
-      } else if (mapping.sourceSchema?.schemaData?.fields) {
-        setSourceSchema(
-          mapping.sourceSchema.schemaData.fields,
-          mapping.sourceSchema.name
-        )
+    const data = (mapping.mappingData ?? {}) as any
+    const store = useMappingStore.getState()
+    store.resetMappingSession()
+
+    // Load source schema
+    if (data.sourceSchema) {
+      setSourceSchema(data.sourceSchema.fields, data.sourceSchema.label)
+    } else if (mapping.sourceSchema?.schemaData?.fields) {
+      setSourceSchema(
+        mapping.sourceSchema.schemaData.fields,
+        mapping.sourceSchema.name
+      )
+    }
+
+    // Load target schema
+    if (data.targetSchema) {
+      setTargetSchema(data.targetSchema.fields, data.targetSchema.label)
+    } else if (mapping.targetSchema?.schemaData?.fields) {
+      setTargetSchema(
+        mapping.targetSchema.schemaData.fields,
+        mapping.targetSchema.name
+      )
+    }
+
+    // Load connections as a deduplicated set
+    const normalizedConnections = Array.isArray(data.connections)
+      ? data.connections
+          .filter((conn: any) => conn?.sourceFieldPath && conn?.targetFieldPath)
+          .map((conn: any) => ({
+            id: conn.id,
+            sourceFieldPath: conn.sourceFieldPath,
+            targetFieldPath: conn.targetFieldPath,
+            transformation: conn.transformation,
+          }))
+      : []
+    store.setConnections(normalizedConnections)
+
+    // Restore tree expansion state if present
+    if (data.fieldTreeExpanded && typeof data.fieldTreeExpanded === 'object') {
+      if (data.fieldTreeExpanded['source-node']) {
+        store.setFieldTreeExpanded('source-node', data.fieldTreeExpanded['source-node'])
       }
-
-      // Load target schema
-      if (data.targetSchema) {
-        setTargetSchema(data.targetSchema.fields, data.targetSchema.label)
-      } else if (mapping.targetSchema?.schemaData?.fields) {
-        setTargetSchema(
-          mapping.targetSchema.schemaData.fields,
-          mapping.targetSchema.name
-        )
-      }
-
-      // Load connections into store
-      if (data.connections && Array.isArray(data.connections)) {
-        // Clear existing connections first
-        const store = useMappingStore.getState()
-
-        // Add each connection
-        data.connections.forEach((conn: any) => {
-          store.addConnection(conn.sourceFieldPath, conn.targetFieldPath)
-          if (conn.transformation) {
-            store.setConnectionTransform(conn.id, conn.transformation)
-          }
-        })
+      if (data.fieldTreeExpanded['target-node']) {
+        store.setFieldTreeExpanded('target-node', data.fieldTreeExpanded['target-node'])
       }
     }
   }, [mapping, setSourceSchema, setTargetSchema])
@@ -115,6 +128,7 @@ function MapperContent({
         targetSchemaId: mapping.targetSchemaId,
         mappingData: {
           connections,
+          fieldTreeExpanded,
           sourceSchema: sourceSchema ? {
             fields: sourceSchema.fields,
             label: sourceSchema.label,

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { FieldNode } from '@/types/parser-types'
+import { useMappingStore } from '../store/useMappingStore'
 
 interface UseFieldTreeReturn {
   expandedPaths: Record<string, boolean>
@@ -21,14 +22,15 @@ interface UseFieldTreeReturn {
  * Each node (source/target) has independent expansion state via nodeId scope.
  */
 export function useFieldTree(nodeId: string): UseFieldTreeReturn {
-  const [expandedPaths, setExpandedPaths] = useState<Record<string, boolean>>({})
+  const expandedPaths = useMappingStore((state) => state.fieldTreeExpanded[nodeId] ?? {})
+  const setFieldTreeExpanded = useMappingStore((state) => state.setFieldTreeExpanded)
 
   const toggleExpand = useCallback((path: string) => {
-    setExpandedPaths((prev) => ({
-      ...prev,
-      [path]: !prev[path],
-    }))
-  }, [])
+    setFieldTreeExpanded(nodeId, {
+      ...expandedPaths,
+      [path]: !expandedPaths[path],
+    })
+  }, [expandedPaths, nodeId, setFieldTreeExpanded])
 
   const expandAll = useCallback((fields: FieldNode[]) => {
     const allPaths: Record<string, boolean> = {}
@@ -43,12 +45,12 @@ export function useFieldTree(nodeId: string): UseFieldTreeReturn {
     }
 
     collectPaths(fields)
-    setExpandedPaths(allPaths)
-  }, [])
+    setFieldTreeExpanded(nodeId, allPaths)
+  }, [nodeId, setFieldTreeExpanded])
 
   const collapseAll = useCallback(() => {
-    setExpandedPaths({})
-  }, [])
+    setFieldTreeExpanded(nodeId, {})
+  }, [nodeId, setFieldTreeExpanded])
 
   const isExpanded = useCallback(
     (path: string) => {

@@ -1,9 +1,9 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { hashPassword } from "@/lib/auth/passwords"
 import { signIn } from "@/auth"
 import { z, ZodError } from "zod"
+import { AuthError } from "next-auth"
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -34,7 +34,8 @@ export async function signup(
       return { error: "Email already registered" }
     }
 
-    // Hash password
+    // Lazy-load password utilities to avoid production bundling/runtime issues
+    const { hashPassword } = await import("@/lib/auth/passwords")
     const passwordHash = await hashPassword(data.password)
 
     // Create tenant and user atomically in transaction
@@ -72,9 +73,30 @@ export async function signup(
     if (error instanceof ZodError) {
       return { error: error.issues[0].message }
     }
-    console.error("Signup error:", error)
 
-    // Re-throw NEXT_REDIRECT errors (signIn uses redirect internally)
-    throw error
+    // Handle Auth.js errors explicitly to avoid generic app crashes.
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Account created but automatic sign in failed. Please log in manually." }
+        default:
+          return { error: "An authentication error occurred during signup" }
+      }
+    }
+
+    // Re-throw NEXT_REDIRECT errors (signIn uses redirect internally).
+    // Next.js marks these as digest errors and they must bubble up.
+    if (
+      error &&
+      typeof error === "object" &&
+      "digest" in error &&
+      typeof (error as { digest?: unknown }).digest === "string" &&
+      (error as { digest: string }).digest.includes("NEXT_REDIRECT")
+    ) {
+      throw error
+    }
+
+    console.error("Signup error:", error)
+    return { error: "Unable to complete signup right now. Please try again." }
   }
 }

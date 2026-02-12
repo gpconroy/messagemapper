@@ -6,14 +6,16 @@ import { FieldNode } from '@/types/parser-types'
 import { ConnectionTransformation } from '@/types/mapping-types'
 import { createMappingEdgeId } from '../lib/validation'
 
+type MappingConnection = {
+  id: string
+  sourceFieldPath: string
+  targetFieldPath: string
+  transformation?: ConnectionTransformation
+}
+
 interface MappingStoreState {
   // Core state (tracked by undo/redo)
-  connections: Array<{
-    id: string
-    sourceFieldPath: string
-    targetFieldPath: string
-    transformation?: ConnectionTransformation
-  }>
+  connections: MappingConnection[]
 
   // UI state (NOT tracked by undo/redo)
   selectedConnectionId: string | null
@@ -21,9 +23,11 @@ interface MappingStoreState {
   // Schema state (NOT tracked by undo/redo)
   sourceSchema: { fields: FieldNode[]; label: string } | null
   targetSchema: { fields: FieldNode[]; label: string } | null
+  fieldTreeExpanded: Record<string, Record<string, boolean>>
 
   // Actions
   addConnection: (sourceFieldPath: string, targetFieldPath: string) => void
+  setConnections: (connections: MappingConnection[]) => void
   removeConnection: (id: string) => void
   removeConnections: (ids: string[]) => void
   setConnectionTransform: (connectionId: string, transformation: ConnectionTransformation) => void
@@ -32,6 +36,8 @@ interface MappingStoreState {
   setSelectedConnectionId: (id: string | null) => void
   setSourceSchema: (fields: FieldNode[], label: string) => void
   setTargetSchema: (fields: FieldNode[], label: string) => void
+  setFieldTreeExpanded: (nodeId: string, expandedPaths: Record<string, boolean>) => void
+  resetMappingSession: () => void
 }
 
 export const useMappingStore = create<MappingStoreState>()(
@@ -41,18 +47,41 @@ export const useMappingStore = create<MappingStoreState>()(
       selectedConnectionId: null,
       sourceSchema: null,
       targetSchema: null,
+      fieldTreeExpanded: {},
 
       addConnection: (sourceFieldPath, targetFieldPath) =>
-        set((state) => ({
-          connections: [
-            ...state.connections,
-            {
-              id: createMappingEdgeId(sourceFieldPath, targetFieldPath),
-              sourceFieldPath,
-              targetFieldPath,
-            },
-          ],
-        })),
+        set((state) => {
+          const id = createMappingEdgeId(sourceFieldPath, targetFieldPath)
+          const exists = state.connections.some((connection) => connection.id === id)
+          if (exists) {
+            return state
+          }
+          return {
+            connections: [
+              ...state.connections,
+              {
+                id,
+                sourceFieldPath,
+                targetFieldPath,
+              },
+            ],
+          }
+        }),
+
+      setConnections: (connections) =>
+        set(() => {
+          const unique = new Map<string, MappingConnection>()
+          for (const connection of connections) {
+            const id = createMappingEdgeId(connection.sourceFieldPath, connection.targetFieldPath)
+            unique.set(id, {
+              ...connection,
+              id,
+            })
+          }
+          return {
+            connections: Array.from(unique.values()),
+          }
+        }),
 
       removeConnection: (id) =>
         set((state) => ({
@@ -95,6 +124,23 @@ export const useMappingStore = create<MappingStoreState>()(
 
       setTargetSchema: (fields, label) =>
         set({ targetSchema: { fields, label } }),
+
+      setFieldTreeExpanded: (nodeId, expandedPaths) =>
+        set((state) => ({
+          fieldTreeExpanded: {
+            ...state.fieldTreeExpanded,
+            [nodeId]: expandedPaths,
+          },
+        })),
+
+      resetMappingSession: () =>
+        set({
+          connections: [],
+          selectedConnectionId: null,
+          sourceSchema: null,
+          targetSchema: null,
+          fieldTreeExpanded: {},
+        }),
     }),
     {
       limit: 50,

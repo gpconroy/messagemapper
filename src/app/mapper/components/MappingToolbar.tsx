@@ -37,6 +37,22 @@ function useUndoRedo() {
 export function MappingToolbar() {
   const { undo, redo, canUndo, canRedo } = useUndoRedo()
   const [showLookupManager, setShowLookupManager] = useState(false)
+  const connections = useMappingStore((state) => state.connections)
+  const setSelectedConnectionId = useMappingStore((state) => state.setSelectedConnectionId)
+  const [selectedConnectionId, setSelectedConnectionIdLocal] = useState<string>('')
+
+  // Keep local selection in sync with current connections list
+  useEffect(() => {
+    if (connections.length === 0) {
+      setSelectedConnectionIdLocal('')
+      return
+    }
+
+    const stillExists = connections.some((connection) => connection.id === selectedConnectionId)
+    if (!stillExists) {
+      setSelectedConnectionIdLocal(connections[0].id)
+    }
+  }, [connections, selectedConnectionId])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -137,6 +153,40 @@ export function MappingToolbar() {
             <rect x="3" y="14" width="7" height="7" />
           </svg>
           Lookup Tables
+        </button>
+        <div className="h-6 border-l border-gray-300" />
+        <label className="sr-only" htmlFor="connection-transform-picker">
+          Pick connection to edit transformation
+        </label>
+        <select
+          id="connection-transform-picker"
+          value={selectedConnectionId}
+          onChange={(event) => setSelectedConnectionIdLocal(event.target.value)}
+          disabled={connections.length === 0}
+          className="px-2 py-1.5 text-sm rounded border border-gray-300 bg-white disabled:opacity-40 disabled:cursor-not-allowed max-w-[320px]"
+          title="Select a mapping connection to configure transformation"
+        >
+          {connections.length === 0 ? (
+            <option value="">No mappings yet</option>
+          ) : (
+            connections.map((connection) => (
+              <option key={connection.id} value={connection.id}>
+                {connection.sourceFieldPath} → {connection.targetFieldPath}
+              </option>
+            ))
+          )}
+        </select>
+        <button
+          onClick={() => {
+            if (selectedConnectionId) {
+              setSelectedConnectionId(selectedConnectionId)
+            }
+          }}
+          disabled={!selectedConnectionId}
+          className="px-3 py-1.5 text-sm rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          title="Open transformation editor for selected mapping"
+        >
+          Edit Transform
         </button>
         <div className="h-6 border-l border-gray-300" />
         <span className="text-xs text-gray-500">

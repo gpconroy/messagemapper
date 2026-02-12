@@ -13,6 +13,26 @@ import { useMappingValidation } from '@/app/mapper/hooks/useMappingValidation'
 import { useMappingStore } from '@/app/mapper/store/useMappingStore'
 import { saveMappingConfig, saveSchemaToDB } from './actions'
 
+type SchemaFormatType = 'json' | 'xml' | 'xsd' | 'json-schema'
+
+function normalizeFormatType(formatType?: string): SchemaFormatType | undefined {
+  if (!formatType) return undefined
+
+  switch (formatType) {
+    case 'json':
+    case 'json-schema':
+    case 'xml':
+    case 'xsd':
+      return formatType
+    case 'json-sample':
+      return 'json'
+    case 'xml-sample':
+      return 'xml'
+    default:
+      return undefined
+  }
+}
+
 function MapperContent({
   workspaceId,
   workspaceName,
@@ -39,7 +59,7 @@ function MapperContent({
   const { validationResult, isValidating, fieldErrors } = useMappingValidation()
 
   // Get connections and schemas for preview panel
-  const { connections, sourceSchema, targetSchema } = useMappingStore()
+  const { connections, sourceSchema, targetSchema, fieldTreeExpanded } = useMappingStore()
 
   // Panel visibility state
   const [isPanelOpen, setIsPanelOpen] = useState(true)
@@ -57,18 +77,22 @@ function MapperContent({
   // Track saved schema IDs
   const [sourceSchemaId, setSourceSchemaId] = useState<string | null>(null)
   const [targetSchemaId, setTargetSchemaId] = useState<string | null>(null)
+  const [sourceFormatType, setSourceFormatType] = useState<SchemaFormatType | null>(null)
+  const [targetFormatType, setTargetFormatType] = useState<SchemaFormatType | null>(null)
 
   const [isPending, startTransition] = useTransition()
 
   // Handle schema upload and save to DB
   const handleSourceSchemaLoaded = async (fields: any[], label: string, formatType?: string) => {
     setSourceSchema(fields, label)
+    const normalizedFormatType = normalizeFormatType(formatType)
+    setSourceFormatType(normalizedFormatType ?? null)
 
     // Save schema to DB if not already saved
-    if (!sourceSchemaId && canEdit && formatType) {
+    if (!sourceSchemaId && canEdit && normalizedFormatType) {
       const result = await saveSchemaToDB({
         name: label,
-        formatType: formatType as any,
+        formatType: normalizedFormatType,
         schemaData: { fields },
       })
 
@@ -80,12 +104,14 @@ function MapperContent({
 
   const handleTargetSchemaLoaded = async (fields: any[], label: string, formatType?: string) => {
     setTargetSchema(fields, label)
+    const normalizedFormatType = normalizeFormatType(formatType)
+    setTargetFormatType(normalizedFormatType ?? null)
 
     // Save schema to DB if not already saved
-    if (!targetSchemaId && canEdit && formatType) {
+    if (!targetSchemaId && canEdit && normalizedFormatType) {
       const result = await saveSchemaToDB({
         name: label,
-        formatType: formatType as any,
+        formatType: normalizedFormatType,
         schemaData: { fields },
       })
 
@@ -102,13 +128,52 @@ function MapperContent({
       return
     }
 
-    if (!sourceSchemaId || !targetSchemaId) {
-      setSaveStatus({ type: 'error', message: 'Please upload both source and target schemas' })
+    if (connections.length === 0) {
+      setSaveStatus({ type: 'error', message: 'Please create at least one field mapping' })
       return
     }
 
-    if (connections.length === 0) {
-      setSaveStatus({ type: 'error', message: 'Please create at least one field mapping' })
+    let resolvedSourceSchemaId = sourceSchemaId
+    let resolvedTargetSchemaId = targetSchemaId
+
+    // Lazy-persist schemas at save time if upload-time persistence was skipped/failed.
+    if (!resolvedSourceSchemaId && canEdit && sourceSchema && sourceFormatType) {
+      const result = await saveSchemaToDB({
+        name: sourceSchema.label,
+        formatType: sourceFormatType,
+        schemaData: { fields: sourceSchema.fields },
+      })
+
+      if (!result.success || !result.schema) {
+        setSaveStatus({ type: 'error', message: result.error || 'Failed to save source schema' })
+        return
+      }
+
+      resolvedSourceSchemaId = result.schema.id
+      setSourceSchemaId(result.schema.id)
+    }
+
+    if (!resolvedTargetSchemaId && canEdit && targetSchema && targetFormatType) {
+      const result = await saveSchemaToDB({
+        name: targetSchema.label,
+        formatType: targetFormatType,
+        schemaData: { fields: targetSchema.fields },
+      })
+
+      if (!result.success || !result.schema) {
+        setSaveStatus({ type: 'error', message: result.error || 'Failed to save target schema' })
+        return
+      }
+
+      resolvedTargetSchemaId = result.schema.id
+      setTargetSchemaId(result.schema.id)
+    }
+
+    if (!resolvedSourceSchemaId || !resolvedTargetSchemaId) {
+      setSaveStatus({
+        type: 'error',
+        message: 'Please upload both source and target schemas before saving',
+      })
       return
     }
 
@@ -119,10 +184,11 @@ function MapperContent({
         workspaceId,
         name: mappingName.trim(),
         description: mappingDescription.trim() || undefined,
-        sourceSchemaId,
-        targetSchemaId,
+        sourceSchemaId: resolvedSourceSchemaId,
+        targetSchemaId: resolvedTargetSchemaId,
         mappingData: {
           connections,
+          fieldTreeExpanded,
           sourceSchema: sourceSchema ? {
             fields: sourceSchema.fields,
             label: sourceSchema.label,
