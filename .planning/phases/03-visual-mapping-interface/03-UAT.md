@@ -1,9 +1,9 @@
 ---
-status: complete
+status: diagnosed
 phase: 03-visual-mapping-interface
 source: [03-01-SUMMARY.md, 03-02-SUMMARY.md]
 started: 2026-02-12T00:00:00Z
-updated: 2026-02-12T08:35:00Z
+updated: 2026-02-12T08:40:00Z
 ---
 
 ## Current Test
@@ -62,7 +62,13 @@ skipped: 5
   reason: "User reported: the files load successfully but I cannot see the fields"
   severity: major
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "State isolation bug - useMappingState() called twice in different components (MapperContent and MappingCanvas) creates separate state instances. When SchemaUploadPanel updates nodes via MapperContent's callbacks, MappingCanvas reads from its own separate instance that never receives the data."
+  artifacts:
+    - path: "src/app/mapper/page.tsx"
+      issue: "MapperContent calls useMappingState() but doesn't pass state down to MappingCanvas"
+    - path: "src/app/mapper/components/MappingCanvas.tsx"
+      issue: "Calls useMappingState() independently, creating isolated state"
+  missing:
+    - "Lift useMappingState() to MapperContent and pass all state as props to MappingCanvas"
+    - "Remove useMappingState() call from MappingCanvas, accept props instead"
+  debug_session: ".planning/debug/field-display-issue-phase-03.md"
