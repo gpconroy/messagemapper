@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 3 of 10 (Visual Mapping Interface)
-Plan: 2 of 3 in current phase (03-01 and 03-02 complete, 03-03 pending)
+Plan: 3 of 4 in current phase (03-01, 03-02, and 03-04 complete, 03-03 pending)
 Status: In Progress
-Last activity: 2026-02-11 — Completed plan 03-02 (Field tree visualization)
+Last activity: 2026-02-12 — Completed plan 03-04 (State isolation bug fix)
 
-Progress: [█████░░░░░] 53%
+Progress: [█████░░░░░] 56%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: ~584s (9.7 minutes)
-- Total execution time: ~2.0 hours
+- Total plans completed: 9
+- Average duration: ~503s (8.4 minutes)
+- Total execution time: ~2.1 hours
 
 **By Phase:**
 
@@ -29,7 +29,7 @@ Progress: [█████░░░░░] 53%
 |-------|-------|--------|
 | 01 | 3/3 | ✅ Complete |
 | 02 | 3/3 | ✅ Complete |
-| 03 | 2/3 | 🔄 In Progress |
+| 03 | 3/4 | 🔄 In Progress |
 
 **Recent Completions:**
 | Phase-Plan | Duration | Tasks | Files |
@@ -42,6 +42,7 @@ Progress: [█████░░░░░] 53%
 | 02-03 | 622s | 2 | 5 |
 | 03-01 | 1399s | 2 | 7 |
 | 03-02 | 252s | 2 | 4 |
+| 03-04 | 180s | 1 | 2 |
 
 ## Accumulated Context
 
@@ -79,6 +80,8 @@ Recent decisions affecting current work:
 - Plan 03-02: FieldTreeItem isExpanded prop is a function, not boolean, for correct recursive child expansion
 - Plan 03-02: Handles shown on leaf fields and collapsed parents, hidden on expanded parents
 - Plan 03-02: nodeTypes defined at module level to prevent React Flow warning about changing types
+- [Phase 03-04]: Lifted useMappingState() to MapperContent parent component to eliminate duplicate state instances
+- [Phase 03-04]: MappingCanvas receives all state via props instead of calling hooks directly
 
 ### Pending Todos
 
@@ -97,7 +100,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-11
-Stopped at: Completed 03-02-PLAN.md (Field tree visualization)
+Last session: 2026-02-12
+Stopped at: Completed 03-04-PLAN.md (State isolation bug fix)
 Resume file: None
 Next: Plan 03-03 (Interactive field mapping with connections)
