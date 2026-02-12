@@ -1,8 +1,7 @@
 import type { FieldNode } from '@/types/parser-types'
 import type { TransformationType } from '@/transformations/types'
 import { areTypesCompatible, inferTransformationOutputType } from './type-compatibility'
-import { validateRequiredFields, flattenFields } from './required-fields'
-import type { ValidationError as RequiredFieldError } from './required-fields'
+import { validateRequiredFields } from './required-fields'
 
 /**
  * Validation error structure
